@@ -1,24 +1,32 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { NgForm } from "@angular/forms";
+import {LoginService} from "./login.service";
 
 @Component({
   moduleId: module.id,
-  selector: 'bergista-ts-login',
+  selector: 'burgista-ts-login',
   templateUrl: 'login.component.html',
-  styleUrls: ['login.component.css']
+  styleUrls: ['login.component.css'],
+  providers: [LoginService]
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit{
+  constructor(private loginService : LoginService){}
   user = {
     username: '',
     password: '',
-    remember: false,
     forget: false
   };
   onSubmit(loginForm: NgForm) {
-    console.log(this.user);
-
+    this.loginService.sendData(this.user)
+      .subscribe(
+        function(data){
+          console.log(data);
+        }
+      );
   }
   makeForgetFalse(){
     this.user.forget=false;
   }
+
+  ngOnInit(){}
 }

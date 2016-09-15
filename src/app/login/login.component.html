@@ -4,7 +4,6 @@
  <div class="text-center" style="padding:10px 0">
   <div class="login-form-1">
     <form id="login-form" class="text-left" (ngSubmit)="onSubmit(login_form)" #login_form="ngForm">
-      <div class="login-form-main-message"></div>
       <div class="main-login-form">
         <div class="login-group">
           <div class="form-group">
@@ -14,18 +13,14 @@
           </div>
           <div class="form-group">
             <span class="input-group-addon"><i class=" fa fa-key fa-fw" aria-hidden="true"></i></span>
-            <input type="password" class="form-control" id="lg_password" name="lg_password" placeholder="password" [(ngModel)]="user.password" [required]="!user.forget" (keydown)="makeForgetFalse()">
-          </div>
-          <div class="form-group login-group-checkbox">
-            <input type="checkbox" id="lg_remember" name="lg_remember" [(ngModel)]="user.remember">
-            <label for="lg_remember">remember me</label>
+            <input type="password" class="form-control" id="lg_password" name="lg_password" placeholder="password" [(ngModel)]="user.password" (keydown)="makeForgetFalse()" (input)="0">
           </div>
           <div class="etc-login-form">
-            <input type="checkbox" id="lg_forget" name="lg_forget" [(ngModel)]="user.forget" [disabled]="user.password.length>0">
+            <input type="checkbox" id="lg_forget" name="lg_forget" [(ngModel)]="user.forget" [disabled]="user.password.length>0" (input)="0">
             <label for="lg_forget">I forgot my password</label>
           </div>
         </div>
-        <button type="submit" class="login-button" [disabled]="!login_form.valid"><i [ngClass]="['fa', login_form.valid?'fa-chevron-right':'fa-lock']"></i></button>
+        <button type="submit" class="login-button" [disabled]="!login_form.valid || (!user.forget && user.password.length===0)"><i [ngClass]="['fa', login_form.valid && (user.forget || user.password.length>0)?'fa-chevron-right':'fa-lock']"></i></button>
       </div>
     </form>
   </div>
