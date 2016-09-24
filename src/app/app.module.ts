@@ -13,13 +13,15 @@ import { LeftbarComponent } from './leftbar/leftbar.component';
 import { RightbarComponent } from './rightbar/rightbar.component';
 import { FooterComponent } from './footer/footer.component';
 import { MainComponent } from './main/main.component';
+import {AppRoutes} from "./app.routes";
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
-    declarations:   [AppComponent, LoginComponent, NavbarComponent, LeftbarComponent, RightbarComponent, FooterComponent, MainComponent],
+    declarations:   [AppComponent, LoginComponent, NavbarComponent, LeftbarComponent, RightbarComponent, FooterComponent, MainComponent, HomeComponent],
     imports:        [
         BrowserModule,
         // Router
-//        RouterModule.forRoot(config),
+        AppRoutes,
         // Forms
         FormsModule,
         // Material Design
