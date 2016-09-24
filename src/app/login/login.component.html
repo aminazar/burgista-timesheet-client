@@ -1,0 +1,28 @@
+<div class="login-form-wrapper">
+<div class="logo" style="padding:15px 0 0 15px">login</div>
+  <!-- Main Form -->
+ <div style="padding-left:15px">
+  <div class="login-form-1">
+    <form id="login-form" class="text-left" (ngSubmit)="onSubmit(login_form)" #login_form="ngForm">
+      <div class="main-login-form">
+        <div class="login-group">
+          <div class="form-group">
+            <span><i class=" fa fa-user fa-fw" aria-hidden="true"></i></span>
+            <input type="text" class="form-control" id="lg_username" name="lg_username" placeholder="username" [(ngModel)]="user.username" required
+                   pattern='admin|(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$'>
+          </div>
+          <div class="form-group">
+            <span><i class=" fa fa-key fa-fw" aria-hidden="true"></i></span>
+            <input type="password" class="form-control" id="lg_password" name="lg_password" placeholder="password" [(ngModel)]="user.password" (keydown)="makeForgetFalse()" (input)="0">
+          </div>
+          <div class="etc-login-form">
+            <input type="checkbox" id="lg_forget" name="lg_forget" [(ngModel)]="user.forget" [disabled]="user.password.length>0" (input)="0">
+            <label for="lg_forget">I forgot my password</label>
+          </div>
+        </div>
+        <button type="submit" class="login-button" [disabled]="!login_form.valid || (!user.forget && user.password.length===0)"><i [ngClass]="['fa', login_form.valid && (user.forget || user.password.length>0)?'fa-chevron-right':'fa-lock']"></i></button>
+      </div>
+    </form>
+  </div>
+</div>
+</div>
