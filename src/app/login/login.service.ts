@@ -1,24 +1,68 @@
 import { Injectable } from '@angular/core';
-import {Http, Headers, Response} from "@angular/http";
-import 'rxjs/Rx';
+import { Http, Headers, Response } from "@angular/http";
+import { Subject } from "rxjs/Rx";
 
 @Injectable()
 export class LoginService {
 
-  constructor(private http:Http) { }
+  public auth_key = 'username';
+  public isLoggedInSource = new Subject<boolean>();
+  public isLoggedIn$ = this.isLoggedInSource.asObservable();
+  private refresher;
+
+  constructor(private http:Http) {
+    this.isLoggedInSource.next( !!localStorage.getItem(this.auth_key) );
+    this.refresh().subscribe((res)=>console.log('refreshed login service: '+ res));
+  }
 
   sendData(user: any){
-    const body = JSON.stringify(user);
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     //TODO: change server address
-    return this.http.post('http://localhost:3000/login', body, {headers: headers}).map((data: Response) => { console.log(data); return data.json });
+
+    return this.http
+        .post(
+            '/login',
+            JSON.stringify(user),
+            { headers }
+        )
+        .map(res => res.status)
+        .map((res) => {
+          if (res===200) {
+            localStorage.setItem(this.auth_key, user.username);
+            this.isLoggedInSource.next(true);
+            this.refresher = setInterval(() => this.refresh().subscribe(()=>console.log('Login is still valid with ', localStorage.getItem(this.auth_key))),60000);
+          }
+          return res;
+        });
   }
 
-  getUser(){
-    const headers = new Headers();
-    //TODO: change server address
-    return this.http.get('http://localhost:3000/session').map((data: Response)=> data.json());
+  logout(){
+    return this.http.get('/logout')
+        .map((data: Response) => data.status)
+        .map((res)=>{
+          if(res==200){
+            localStorage.removeItem(this.auth_key);
+            this.isLoggedInSource.next( false );
+            clearInterval(this.refresher);
+          }
+          return res;
+        });
   }
 
+  refresh(){
+    return this.http.get('/session')
+        .map((res: Response) => res.json())
+        .map((res)=> {
+          if (!res.user) {
+              localStorage.removeItem(this.auth_key);
+              this.isLoggedInSource.next(false);
+          }
+          else{
+              localStorage.setItem(this.auth_key,res.user);
+              this.isLoggedInSource.next(true);
+          }
+          return res;
+        });
+  }
 }

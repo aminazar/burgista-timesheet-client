@@ -3,7 +3,6 @@
  */
 import { NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-import { RouterModule } from "@angular/router";
 import { HttpModule } from "@angular/http";
 import { BrowserModule } from "@angular/platform-browser";
 import { AppComponent } from "./app.component";
@@ -15,9 +14,12 @@ import { FooterComponent } from './footer/footer.component';
 import { MainComponent } from './main/main.component';
 import {AppRoutes} from "./app.routes";
 import { HomeComponent } from './home/home.component';
+import { BranchesComponent } from './branches/branches.component';
+import {LoginService} from "./login/login.service";
+import {LoggedInGuard} from "./login/logged-in.guard";
 
 @NgModule({
-    declarations:   [AppComponent, LoginComponent, NavbarComponent, LeftbarComponent, RightbarComponent, FooterComponent, MainComponent, HomeComponent],
+    declarations:   [AppComponent, LoginComponent, NavbarComponent, LeftbarComponent, RightbarComponent, FooterComponent, MainComponent, HomeComponent, BranchesComponent],
     imports:        [
         BrowserModule,
         // Router
@@ -27,6 +29,7 @@ import { HomeComponent } from './home/home.component';
         // Material Design
         HttpModule
     ],
+    providers:      [LoginService,LoggedInGuard],
     bootstrap:      [AppComponent]
 })
 export class AppModule{}

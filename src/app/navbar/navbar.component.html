@@ -9,14 +9,12 @@
   </div>
   <div class="collapse navbar-collapse" id="myNavbar">
     <ul class="nav navbar-nav">
-      <li><a href="#">About</a></li>
-      <li><a href="#">Projects</a></li>
-      <li><a href="#">Contact</a></li>
+      <li><a [routerLink]="['branches']">Branches</a></li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
-      <li *ngIf="!(this.loginService.getUser()|async)"><a [routerLink]="['login']"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-      <li *ngIf="(this.loginService.getUser()|async)">Logged in as: {{user}}</li>
-      <li *ngIf="(this.loginService.getUser()|async)"><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+      <li *ngIf="!this.isLoggedIn"><a [routerLink]="['login']"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+      <li *ngIf="this.isLoggedIn"></li>
+      <li *ngIf="this.isLoggedIn"><a (click)="logout()" ><span class="glyphicon glyphicon-user"></span> {{user}} - <span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
     </ul>
   </div>
 </div>

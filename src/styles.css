@@ -7,9 +7,10 @@
 /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
 .row.content {
     background-image: url('/assets/img/Burg_bg_light.jpg');
+    background-size: 320px;
     background-position: center;
     background-repeat: no-repeat;
-    min-height: 1100px;}
+    min-height: 800px;}
 .navbar-brand{
     font-family:"American Typewriter", serif;
     font-size: 28px;
