@@ -9,13 +9,7 @@ import {RestService} from "../rest.service";
 export class BranchesComponent {
   public newItem = "";
 
-  public branches = [{
-    bid: 2,
-    name:'xyi',
-  },{
-    bid:1,
-    name:'baker street'
-  }];
+  public branches = [];
 
   constructor(private restService :RestService) {
     restService.get('branches')

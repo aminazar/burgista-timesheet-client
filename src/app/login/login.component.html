@@ -18,7 +18,7 @@
             <input type="checkbox" id="lg_forget" name="lg_forget" [(ngModel)]="user.forget" [disabled]="user.password.length>0" (input)="0">
             <label for="lg_forget">I forgot my password</label>
           </div>
-          <div [ngClass]="['login-form-main-message','error', message.length ? 'show' : '']"><span><i class=" fa exclamation-triangle fa-fw" aria-hidden="true"></i></span>{{message}}</div>
+          <div [ngClass]="['login-form-main-message','error', message.length ? 'show' : '']"><span><i class=" fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i></span>{{message}}</div>
         </div>
         <button type="submit" class="login-button" [disabled]="!login_form.valid || (!user.forget && user.password.length===0)"><i [ngClass]="['fa', login_form.valid && (user.forget || user.password.length>0)?'fa-chevron-right':'fa-lock']"></i></button>
       </div>
