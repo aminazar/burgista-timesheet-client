@@ -17,6 +17,7 @@ import { HomeComponent } from './home/home.component';
 import { BranchesComponent } from './branches/branches.component';
 import {LoginService} from "./login/login.service";
 import {LoggedInGuard} from "./login/logged-in.guard";
+import {RestService} from "./rest.service";
 
 @NgModule({
     declarations:   [AppComponent, LoginComponent, NavbarComponent, LeftbarComponent, RightbarComponent, FooterComponent, MainComponent, HomeComponent, BranchesComponent],
@@ -29,7 +30,7 @@ import {LoggedInGuard} from "./login/logged-in.guard";
         // Material Design
         HttpModule
     ],
-    providers:      [LoginService,LoggedInGuard],
+    providers:      [LoginService,LoggedInGuard,RestService],
     bootstrap:      [AppComponent]
 })
 export class AppModule{}

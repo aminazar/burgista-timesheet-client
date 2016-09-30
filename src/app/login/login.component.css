@@ -156,6 +156,7 @@ label.form-invalid:after {
 }
 .login-form-main-message.error {
   border-left-color: #e74c3c;
+  color: red;
 }
 /*=== 8. Custom Checkbox & Radio ===*/
 /* Base for label styling */

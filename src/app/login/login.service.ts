@@ -31,7 +31,7 @@ export class LoginService {
           if (res===200) {
             localStorage.setItem(this.auth_key, user.username);
             this.isLoggedInSource.next(true);
-            this.refresher = setInterval(() => this.refresh().subscribe(()=>console.log('Login is still valid with ', localStorage.getItem(this.auth_key))),60000);
+            this.refresher = setInterval(() => this.refresh().subscribe((res)=>console.log('login refresh result ', res)),60000);
           }
           return res;
         });
