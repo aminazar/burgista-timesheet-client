@@ -136,15 +136,14 @@ label.form-invalid:after {
 /*=== 7. Form - Main Message ===*/
 .login-form-main-message {
   background: #ffffff;
-  color: #999999;
-  border-left: 3px solid transparent;
-  border-radius: 3px;
+  border: 0px;
   margin-bottom: 8px;
   font-weight: bold;
   height: 0;
-  padding: 0 20px 0 17px;
+  padding:0px;
   opacity: 0;
   transition: all ease-in-out 200ms;
+  color: green;
 }
 .login-form-main-message.show {
   height: auto;
@@ -155,7 +154,6 @@ label.form-invalid:after {
   border-left-color: #2ecc71;
 }
 .login-form-main-message.error {
-  border-left-color: #e74c3c;
   color: red;
 }
 /*=== 8. Custom Checkbox & Radio ===*/

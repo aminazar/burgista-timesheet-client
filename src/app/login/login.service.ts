@@ -6,6 +6,7 @@ import { Subject } from "rxjs/Rx";
 export class LoginService {
 
   public auth_key = 'username';
+  public originBeforeLogin = '/';
   public isLoggedInSource = new Subject<boolean>();
   public isLoggedIn$ = this.isLoggedInSource.asObservable();
   private refresher;
