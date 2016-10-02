@@ -19,9 +19,11 @@ import {LoginService} from "./login/login.service";
 import {LoggedInGuard} from "./login/logged-in.guard";
 import {RestService} from "./rest.service";
 import { UsersComponent } from './users/users.component';
+import { MessageFadeOutComponent } from './message-fade-out/message-fade-out.component';
+import { ItemsComponent } from './items/items.component';
 
 @NgModule({
-    declarations:   [AppComponent, LoginComponent, NavbarComponent, LeftbarComponent, RightbarComponent, FooterComponent, MainComponent, HomeComponent, BranchesComponent, UsersComponent],
+    declarations:   [AppComponent, LoginComponent, NavbarComponent, LeftbarComponent, RightbarComponent, FooterComponent, MainComponent, HomeComponent, BranchesComponent, UsersComponent, MessageFadeOutComponent, ItemsComponent],
     imports:        [
         BrowserModule,
         // Router

@@ -1,12 +1,1 @@
-<h1>Branches</h1>
-<ul class="list-group">
-  <li class="list-group-item" *ngFor="let item of branches">
-    {{item.name}} <span (click)="remove(item.bid)"><i class=" fa fa-times fa-fw" style='color: red' aria-hidden="true"></i></span>
-  </li>
-</ul>
-<div class="input-group">
-  <input type="text" class="form-control" placeholder="Add branch" [(ngModel)]="newItem" focus>
-  <span class="input-group-btn">
-    <button class="btn btn-secondary" type="button" (click)="add()">Add</button>
-  </span>
-</div>
+<app-items [api]="'branch'" [table]="'branches'" [column]="'name'" [id]="'bid'"></app-items>
