@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input } from '@angular/core';
 import {Response} from "@angular/http";
 import {RestService} from "../rest.service";
 
@@ -19,8 +19,23 @@ export class ItemsComponent implements OnInit{
   @Input('column') valueColumn: string;
   @Input('id') idColumn: string;
 
-  constructor(private restService :RestService) {}
+  public btnClass: string;
+  public btnLabel:  string;
+  public btnEnabled: boolean;
 
+  constructor(private restService :RestService) {
+    this.enableButton()
+  }
+  enableButton(){
+    this.btnClass='';
+    this.btnLabel='Add';
+    this.btnEnabled= true;
+  }
+  disableButton(){
+    this.btnClass='pressed';
+    this.btnLabel='Adding...';
+    this.btnEnabled= false;
+  }
   remove(id){
     console.log('remove',id);
     this.restService.delete(this.apiName, id )
@@ -43,11 +58,13 @@ export class ItemsComponent implements OnInit{
       this.showError('"'+ this.newItem + '" already exists.')
     }
     else{
+      this.disableButton();
       var newRow = {};
       newRow[this.valueColumn]=this.newItem;
 
       this.restService.insert(this.apiName, newRow)
           .subscribe((res:any)=> {
+                this.enableButton();
                 switch( this.apiName ) {
                   case 'user':
                     this.showMessage('An email has been sent to "' + this.newItem + '" asking them to set a password.');
@@ -64,7 +81,7 @@ export class ItemsComponent implements OnInit{
                 newRow[this.valueColumn] = this.newItem;
                 this.items.push(newRow);
               },
-              (err:Response)=> this.showError(err.text())
+              (err:Response)=>{this.enableButton(); this.showError(err.text());}
           );
     }
   }

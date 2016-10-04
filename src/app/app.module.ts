@@ -21,16 +21,21 @@ import {RestService} from "./rest.service";
 import { UsersComponent } from './users/users.component';
 import { MessageFadeOutComponent } from './message-fade-out/message-fade-out.component';
 import { ItemsComponent } from './items/items.component';
+import { EmployeesComponent } from './employees/employees.component';
+import { TimesComponent } from './times/times.component';
+import { ReportComponent } from './report/report.component';
+import { EmployeeFormComponent } from './employees/employee-form.component';
+import { MaterialModule } from "@angular/material";
 
 @NgModule({
-    declarations:   [AppComponent, LoginComponent, NavbarComponent, LeftbarComponent, RightbarComponent, FooterComponent, MainComponent, HomeComponent, BranchesComponent, UsersComponent, MessageFadeOutComponent, ItemsComponent],
+    declarations:   [AppComponent, LoginComponent, NavbarComponent, LeftbarComponent, RightbarComponent, FooterComponent, MainComponent, HomeComponent, BranchesComponent, UsersComponent, MessageFadeOutComponent, ItemsComponent, EmployeesComponent, TimesComponent, ReportComponent, EmployeeFormComponent, EmployeeFormComponent],
     imports:        [
         BrowserModule,
         // Router
         AppRoutes,
         // Forms
         FormsModule,
-        // Material Design
+        MaterialModule.forRoot(),
         HttpModule
     ],
     providers:      [LoginService,LoggedInGuard,RestService],

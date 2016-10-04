@@ -9,6 +9,6 @@
 <div class="input-group">
   <input type="text" class="form-control" placeholder="Add {{apiName}}" [(ngModel)]="newItem" focus>
   <span class="input-group-btn">
-    <button class="btn btn-secondary" type="button" (click)="add()">Add</button>
+    <button type="button" (click)="add()" [ngClass]="['btn','btn-secondary',btnClass]" [disabled]="!btnEnabled">{{btnLabel}}</button>
   </span>
 </div>
