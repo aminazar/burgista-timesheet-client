@@ -1,0 +1,23 @@
+<md-card>
+  <md-card-title class="app-input-section">{{title}}</md-card-title>
+  <md-input placeholder="First name" maxlength="{{nameLength}}" [(ngModel)]="value.firstname" #firstname>
+    <md-hint align="end">
+      {{firstname.characterCount}} / {{nameLength}}
+    </md-hint>
+  </md-input>
+  <md-input placeholder="Surname" maxlength="{{nameLength}}" #surname [(ngModel)]="value.surname">
+    <md-hint align="end">
+      {{surname.characterCount}} / {{nameLength}}
+    </md-hint>
+  </md-input>
+  <md-input placeholder="Hourly Rate" align="end" [(ngModel)]="value.rate">
+    <span md-prefix>£</span>
+  </md-input>
+  <md-checkbox [(ngModel)]="value.isManager">Manager</md-checkbox>
+  <button md-mini-fab [disabled]="!isEnabled" (click)="action()" color="primary">
+    <md-icon fontSet="fa" [fontIcon]="buttonType"></md-icon>
+  </button>
+  <button  *ngIf="!isNew" md-mini-fab [disabled]="!isEnabled" (click)="remove()" color="accent">
+    <md-icon fontSet="fa" fontIcon="fa-times"></md-icon>
+  </button>
+</md-card>

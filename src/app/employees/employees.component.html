@@ -1,0 +1,8 @@
+<app-employee-form (add)="add($event)" [isEnabled]="addEnabled" [isNew]="true"></app-employee-form>
+<app-message-fade-out [bgClass]="'info'" [(message)]="message"></app-message-fade-out>
+<app-message-fade-out [bgClass]="'warning'" [(message)]="errMessage"></app-message-fade-out>
+<ul class="list-group">
+  <li class="list-group-item" *ngFor="let item of items">
+    <app-employee-form [value]="item" [isEnabled]="updateEnabled[item.eid]" [isNew]="false" (update)="update($event)" (delete)="remove($event)"></app-employee-form>
+  </li>
+</ul>
