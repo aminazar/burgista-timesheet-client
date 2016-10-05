@@ -7,7 +7,7 @@
   </li>
 </ul>
 <div class="input-group">
-  <input type="text" class="form-control" placeholder="Add {{apiName}}" [(ngModel)]="newItem" focus>
+  <input type="text" class="form-control" [(ngModel)]="newItem" autofocus [placeholder]="placeholder">
   <span class="input-group-btn">
     <button type="button" (click)="add()" [ngClass]="['btn','btn-secondary',btnClass]" [disabled]="!btnEnabled">{{btnLabel}}</button>
   </span>

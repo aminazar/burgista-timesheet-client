@@ -14,6 +14,7 @@ export class RestService {
     return this.http.get('/api/'+table).map((data: Response)=> data.json());
   };
 
+
   delete(table, id){
     return this.http.delete('/api/' + table + '/' + id );
   }

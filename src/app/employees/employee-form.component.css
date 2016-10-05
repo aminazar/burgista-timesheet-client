@@ -1,0 +1,14 @@
+div.date-group{
+    white-space: nowrap;
+    margin-left:10px;
+    padding-top:22px;
+    display:inline-block;
+    vertical-align: middle;
+}
+span.date-label{
+    width:90px;
+}
+
+.date-input{
+    width:82px;
+}

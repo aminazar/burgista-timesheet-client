@@ -16,7 +16,8 @@
       "mobile": false,
       "styles": [
         "styles.css",
-        "md-theme.sass"
+        "md-theme.sass",
+        "md-card.scss"
       ],
       "scripts": [],
       "environments": {

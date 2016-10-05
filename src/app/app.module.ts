@@ -26,9 +26,10 @@ import { TimesComponent } from './times/times.component';
 import { ReportComponent } from './report/report.component';
 import { EmployeeFormComponent } from './employees/employee-form.component';
 import { MaterialModule } from "@angular/material";
+import { DatepickerComponent } from './angular2-material-datepicker/datepicker.component'
 
 @NgModule({
-    declarations:   [AppComponent, LoginComponent, NavbarComponent, LeftbarComponent, RightbarComponent, FooterComponent, MainComponent, HomeComponent, BranchesComponent, UsersComponent, MessageFadeOutComponent, ItemsComponent, EmployeesComponent, TimesComponent, ReportComponent, EmployeeFormComponent, EmployeeFormComponent],
+    declarations:   [AppComponent, LoginComponent, NavbarComponent, LeftbarComponent, RightbarComponent, FooterComponent, MainComponent, HomeComponent, BranchesComponent, UsersComponent, MessageFadeOutComponent, ItemsComponent, EmployeesComponent, TimesComponent, ReportComponent, EmployeeFormComponent, EmployeeFormComponent, DatepickerComponent],
     imports:        [
         BrowserModule,
         // Router
@@ -36,7 +37,7 @@ import { MaterialModule } from "@angular/material";
         // Forms
         FormsModule,
         MaterialModule.forRoot(),
-        HttpModule
+        HttpModule,
     ],
     providers:      [LoginService,LoggedInGuard,RestService],
     bootstrap:      [AppComponent]

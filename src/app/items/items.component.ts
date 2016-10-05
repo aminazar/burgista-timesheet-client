@@ -18,6 +18,7 @@ export class ItemsComponent implements OnInit{
   @Input('api') apiName: String;
   @Input('column') valueColumn: string;
   @Input('id') idColumn: string;
+  @Input('placeholder') placeholder:string;
 
   public btnClass: string;
   public btnLabel:  string;
