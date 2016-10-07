@@ -11,23 +11,34 @@ To
   <md-card-content>
     <div class="panel panel-default">
       <!-- Default panel contents -->
+      <button type="button" class="btn btn-default btn-lg  dropdown-toggle">
+        <span class="glyphicon download-alt" aria-hidden="true"></span> Download
+      </button>
+      <span class="caret"></span>
+      <span class="sr-only">Toggle Dropdown</span>
+      <ul class="dropdown-menu">
+        <li><a #dlLinkC download="{{title}}.csv" [href]="data" (click)="downloadCSV()">As CSV file</a></li>
+      </ul>
       <div class="panel-heading">Employees timesheet report</div>
 
       <!-- Table -->
-      <table id="datatable" class="table">
-        <th>First name</th><th>Surname</th><th>Rate</th><th>Hours</th><th>Minutes</th><th>Break Time</th><th>Sum</th><th>Paid</th><th>Remainder</th>
-        <tr *ngFor="let row of data">
+      <table class="table">
+        <th>Firstname</th><th>Surname</th><th>Rate</th><th>Hours</th><th>Mins</th><th>Breaks</th><th>Sum</th><th>Paid</th><th>Remainder</th>
+        <tr *ngFor="let row of table">
           <td>{{row.firstname}}</td>
           <td>{{row.surname}}</td>
           <td>{{row.rate.substr(1)}}</td>
           <td>{{row.hours}}</td>
-          <td>{{row.minutes}}</td>
+          <td>{{row.mins}}</td>
           <td>{{row.breaks}}</td>
           <td>{{calc[row.eid]}}</td>
-          <td><input [ngModel]="paid[row.eid]"</td>
-          <td>{{calc[row.id]-paid[row.eid]}}</td>
+          <td><input style="width:30px" [(ngModel)]="paid[row.eid]"/></td>
+          <td>{{calc[row.eid]-paid[row.eid]}}</td>
         </tr>
       </table>
       </div>
   </md-card-content>
+  <md-card-actions>
+
+  </md-card-actions>
 </md-card>
