@@ -26,10 +26,10 @@
     </div>
 </div>
   <md-card-actions>
-    <button md-mini-fab [disabled]="!updateEnabled" (click)="action()" color="primary">
+    <button md-mini-fab [disabled]="!updateEnabled" (click)="action()" color="primary" title="{{(isNew?'Add ':'Update ')+ ' Employee Record'}}">
       <md-icon fontSet="fa" [fontIcon]="buttonType"></md-icon>
     </button>
-    <button *ngIf="!isNew" md-mini-fab [disabled]="!deleteEnabled" (click)="remove()" color="accent">
+    <button *ngIf="!isNew" md-mini-fab [disabled]="!deleteEnabled" (click)="remove()" color="accent" title="Delete Employee Record">
       <md-icon fontSet="fa" fontIcon="fa-times"></md-icon>
     </button>
   </md-card-actions>

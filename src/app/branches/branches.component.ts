@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./branches.component.css']
 })
 export class BranchesComponent {
+
   constructor(){}
 }

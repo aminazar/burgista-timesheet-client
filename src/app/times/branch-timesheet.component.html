@@ -1,0 +1,19 @@
+<md-card class="md-card">
+  <md-card-title-group>
+    <md-card-title class="app-input-section">{{name}} Branch</md-card-title>
+  <md-card-subtitle>
+    {{getSubtitle()}}
+  </md-card-subtitle>
+  </md-card-title-group>
+  <md-card-actions>
+    <button md-raised-button [disabled]="isLocked" color='primary' (click)="lock()">
+      <md-icon fontSet="fa" [fontIcon]="isLocked?'fa-lock':'fa-unlock-alt'"></md-icon>
+      {{isLocked?'Locked by: ' + lockedBy + ' at ' + lockedAt : 'Lock this branch'}}
+    </button>
+  </md-card-actions>
+</md-card>
+<ul class="list-group">
+  <li class="list-group-item" *ngFor="let item of items">
+    <app-worktime [value]="item" [bid]="bid" [date]="date"></app-worktime>
+  </li>
+</ul>

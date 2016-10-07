@@ -42,3 +42,7 @@ body{
 .col-sm-8{
     padding:15px;
 }
+@font-face{
+    font-family:'digital-clock-font';
+    src: url('./assets/verti___.ttf');
+}

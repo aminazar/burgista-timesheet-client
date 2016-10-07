@@ -26,10 +26,13 @@ import { TimesComponent } from './times/times.component';
 import { ReportComponent } from './report/report.component';
 import { EmployeeFormComponent } from './employees/employee-form.component';
 import { MaterialModule } from "@angular/material";
-import { DatepickerComponent } from './angular2-material-datepicker/datepicker.component'
+import { DatepickerComponent } from './angular2-material-datepicker/datepicker.component';
+import { BranchTimesheetComponent } from './times/branch-timesheet.component';
+import { WorktimeComponent } from './times/worktime.component';
+import { TimerComponent } from './times/timer.component'
 
 @NgModule({
-    declarations:   [AppComponent, LoginComponent, NavbarComponent, LeftbarComponent, RightbarComponent, FooterComponent, MainComponent, HomeComponent, BranchesComponent, UsersComponent, MessageFadeOutComponent, ItemsComponent, EmployeesComponent, TimesComponent, ReportComponent, EmployeeFormComponent, EmployeeFormComponent, DatepickerComponent],
+    declarations:   [AppComponent, LoginComponent, NavbarComponent, LeftbarComponent, RightbarComponent, FooterComponent, MainComponent, HomeComponent, BranchesComponent, UsersComponent, MessageFadeOutComponent, ItemsComponent, EmployeesComponent, TimesComponent, ReportComponent, EmployeeFormComponent, EmployeeFormComponent, DatepickerComponent, BranchTimesheetComponent, WorktimeComponent, TimerComponent],
     imports:        [
         BrowserModule,
         // Router

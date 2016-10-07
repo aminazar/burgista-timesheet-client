@@ -1,3 +1,13 @@
-<p>
-  times works!
-</p>
+<div style="padding-bottom:10px;margin-bottom:5px;">
+    <material-datepicker class="date-input" [date]="tDate" (onSelect)="onDateSelect($event)"></material-datepicker>
+</div>
+<md-tab-group>
+    <md-tab *ngFor="let branch of branches">
+        <template md-tab-label>{{branch.name}}</template>
+        <template md-tab-content>
+
+                <app-branch-timesheet [bid]="branch.bid" [name]="branch.name" [date]="tDate"></app-branch-timesheet>
+
+        </template>
+    </md-tab>
+</md-tab-group>

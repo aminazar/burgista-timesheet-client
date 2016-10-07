@@ -14,7 +14,7 @@ export class Employee{
 
     isEqual(other:Employee){
         return  this.sameName(other) &&
-                this.rate === other.rate &&
+                Math.round(parseFloat(this.rate)*100) === Math.round(parseFloat(other.rate)*100) &&
                 this.contractDate === other.contractDate &&
                 this.contractEnd === other.contractEnd;
     }
