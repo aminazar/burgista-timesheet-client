@@ -1,0 +1,30 @@
+<md-card>
+  <md-card-title>
+    {{this.value.surname + ',' + this.value.firstname}}
+  </md-card-title>
+  <md-card-content>
+    <div class="input-group">
+      <div class="md-checkbox-label">Start Time</div>
+      <app-timer [isRunning]="isRunning" [value]="value.startTime" (change)="value.startTime.hours=startTimer.hours();value.startTime.minutes=startTimer.minutes()" #startTimer></app-timer>
+    </div>
+    <div *ngIf="!value.endTime.infinity" class="input-group">
+      <div class="md-checkbox-label">End Time</div>
+        <app-timer [isRunning]="isRunning" [value]="value.endTime" (change)="value.endTime.hours=endTimer.hours();value.endTime.minutes=endTimer.minutes()" #endTimer></app-timer>
+    </div>
+    <div *ngIf="!value.startTime.infinity" class="input-group message" style="padding-top:15px;padding left:10px">
+      <p class="bg-info">Time Worked: {{value.getTimeWorkedStr(date)}}</p>
+      <p class="bg-warning">Contractual breaks: {{value.getBreakTime(date)}}</p>
+    </div>
+  </md-card-content>
+  <md-card-actions>
+    <button md-mini-fab [disabled]="isRunning || !value.endTime.infinity" (click)="play(startTimer)" color="primary" title="Start">
+      <md-icon fontSet="fa" fontIcon="fa-play"></md-icon>
+    </button>
+    <button md-mini-fab [disabled]="!isRunning" (click)="stop(endTimer)" color="accent" title="Stop">
+      <md-icon fontSet="fa" fontIcon="fa-stop"></md-icon>
+    </button>
+    <button md-mini-fab [disabled]="!isRunning" (click)="remove()" color="accent" title="Remove this entry">
+      <md-icon fontSet="fa" fontIcon="fa-times"></md-icon>
+    </button>
+  </md-card-actions>
+</md-card>

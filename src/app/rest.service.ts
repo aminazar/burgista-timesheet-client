@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from "@angular/http";
+import {Http, Response, URLSearchParams} from "@angular/http";
 import "rxjs/add/operator/map";
 
 @Injectable()
@@ -14,6 +14,15 @@ export class RestService {
     return this.http.get('/api/'+table).map((data: Response)=> data.json());
   };
 
+  getWithParams(table,values){
+    let params: URLSearchParams = new URLSearchParams();
+    for(var key in values)
+      if(values.hasOwnProperty(key))
+        params.set(key,values[key]);
+
+    return this.http.get('/api/'+table,{search: params}).map((data:Response)=>
+      data.json());
+  }
 
   delete(table, id){
     return this.http.delete('/api/' + table + '/' + id );

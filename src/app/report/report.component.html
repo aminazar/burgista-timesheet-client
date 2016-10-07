@@ -1,3 +1,33 @@
-<p>
-  report works!
-</p>
+From
+<div style="padding-bottom:10px;margin-bottom:5px;">
+  <material-datepicker class="date-input" [date]="startDate" (onSelect)="onStartSelect($event)"></material-datepicker>
+</div>
+To
+<div style="padding-bottom:10px;margin-bottom:5px;">
+  <material-datepicker class="date-input" [date]="endDate" (onSelect)="onEndSelect($event)"></material-datepicker>
+</div>
+<md-card class="md-card">
+  <md-card-title>{{title}}</md-card-title>
+  <md-card-content>
+    <div class="panel panel-default">
+      <!-- Default panel contents -->
+      <div class="panel-heading">Employees timesheet report</div>
+
+      <!-- Table -->
+      <table id="datatable" class="table">
+        <th>First name</th><th>Surname</th><th>Rate</th><th>Hours</th><th>Minutes</th><th>Break Time</th><th>Sum</th><th>Paid</th><th>Remainder</th>
+        <tr *ngFor="let row of data">
+          <td>{{row.firstname}}</td>
+          <td>{{row.surname}}</td>
+          <td>{{row.rate.substr(1)}}</td>
+          <td>{{row.hours}}</td>
+          <td>{{row.minutes}}</td>
+          <td>{{row.breaks}}</td>
+          <td>{{calc[row.eid]}}</td>
+          <td><input [ngModel]="paid[row.eid]"</td>
+          <td>{{calc[row.id]-paid[row.eid]}}</td>
+        </tr>
+      </table>
+      </div>
+  </md-card-content>
+</md-card>
