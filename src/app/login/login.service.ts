@@ -13,7 +13,7 @@ export class LoginService {
 
   constructor(private http:Http) {
     this.isLoggedInSource.next( !!localStorage.getItem(this.auth_key) );
-    this.refresh().subscribe((res)=>console.log('refreshed login service: '+ res));
+    this.refresh().subscribe((res)=>console.log('refreshed login service: ', res));
   }
 
   sendData(user: any){

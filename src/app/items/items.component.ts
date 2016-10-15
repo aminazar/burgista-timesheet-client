@@ -13,6 +13,8 @@ export class ItemsComponent implements OnInit{
   public items = [];
   public message ="";
   public errMessage = "";
+  public beingEdited = {};
+  private copy = {};
 
   @Input('table') tableName: String;
   @Input('api') apiName: String;
@@ -45,7 +47,8 @@ export class ItemsComponent implements OnInit{
               if(res.json() !== 0) {
                 var ind = this.items.findIndex((el)=>el[this.idColumn]=== id);
                 this.items.splice(ind, 1);
-
+                delete this.beingEdited[id];
+                delete this.copy[id];
               }
             },
             (err: Response)=> this.showError(err.text())
@@ -80,6 +83,8 @@ export class ItemsComponent implements OnInit{
                 var newRow = {};
                 newRow[this.idColumn]    = res.json();
                 newRow[this.valueColumn] = this.newItem;
+                this.beingEdited[res.json()]=false;
+                this.copy[res.json()]= this.newItem;
                 this.items.push(newRow);
               },
               (err:Response)=>{this.enableButton(); this.showError(err.text());}
@@ -87,6 +92,32 @@ export class ItemsComponent implements OnInit{
     }
   }
 
+  update(id, keyCode){
+    if(keyCode===13) {
+      var values = {};
+      values = this.items.find(el=>el[this.idColumn] === id);
+      this.restService.update(this.apiName, id, values)
+        .subscribe(
+          ()=> {
+            this.beingEdited[id] = false;
+            this.copy[id] = values[this.valueColumn];
+          },
+          (err:any)=> {
+            console.log('Could not update:', err);
+            this.beingEdited[id] = false;
+            this.items.find(el=>el[this.idColumn] === id)[this.valueColumn] = this.copy[id];
+          }
+        );
+    }
+    else if(this.apiName==='user'){
+      this.beingEdited[id] = false;
+      this.items.find(el=>el[this.idColumn] === id)[this.valueColumn] = this.copy[id];
+    }
+  }
+
+  letUpdate(id){
+    this.beingEdited[id]=true;
+  }
   showError(err) {
     //To create a change in message to invoke fade out effect
     if(this.errMessage === err)
@@ -105,7 +136,17 @@ export class ItemsComponent implements OnInit{
 
   ngOnInit(){
     this.restService.get(this.tableName)
-        .subscribe((res:any)=>this.items=res,(err:any)=>console.log('Failed to get items',err));
+        .subscribe(
+          (res:any)=> {
+            this.items = res;
+
+            res.forEach((item) => {
+              this.beingEdited[item[this.idColumn]]=false;
+              this.copy[item[this.idColumn]] = item[this.valueColumn];
+            });
+          },
+          (err:any)=>console.log('Failed to get items',err)
+        );
   }
 
 }

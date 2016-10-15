@@ -30,20 +30,18 @@ import { DatepickerComponent } from './angular2-material-datepicker/datepicker.c
 import { BranchTimesheetComponent } from './times/branch-timesheet.component';
 import { WorktimeComponent } from './times/worktime.component';
 import { TimerComponent } from './times/timer.component';
-import { CsvDownloadDirective } from './report/csv-download.directive'
 
 @NgModule({
-    declarations:   [AppComponent, LoginComponent, NavbarComponent, LeftbarComponent, RightbarComponent, FooterComponent, MainComponent, HomeComponent, BranchesComponent, UsersComponent, MessageFadeOutComponent, ItemsComponent, EmployeesComponent, TimesComponent, ReportComponent, EmployeeFormComponent, EmployeeFormComponent, DatepickerComponent, BranchTimesheetComponent, WorktimeComponent, TimerComponent, CsvDownloadDirective],
+    declarations:   [AppComponent, LoginComponent, NavbarComponent, LeftbarComponent, RightbarComponent, FooterComponent, MainComponent, HomeComponent, BranchesComponent, UsersComponent, MessageFadeOutComponent, ItemsComponent, EmployeesComponent, TimesComponent, ReportComponent, EmployeeFormComponent, EmployeeFormComponent, DatepickerComponent, BranchTimesheetComponent, WorktimeComponent, TimerComponent],
     imports:        [
         BrowserModule,
-        // Router
         AppRoutes,
         // Forms
         FormsModule,
         MaterialModule.forRoot(),
         HttpModule,
     ],
-    providers:      [LoginService,LoggedInGuard,RestService],
+    providers:      [LoginService,RestService,LoggedInGuard],
     bootstrap:      [AppComponent]
 })
 export class AppModule{}

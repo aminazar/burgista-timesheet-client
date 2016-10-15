@@ -2,3 +2,9 @@
     border: grey solid 1px;
     color: darkgrey;
 }
+
+.hidden{
+    display:none;
+    width:0px;
+    visibility: hidden;
+}
