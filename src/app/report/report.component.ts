@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {RestService} from "../rest.service";
 import * as moment from 'moment';
+let fileSaver = require('file-saver/FileSaver.min.js');
 
 @Component({
   selector: 'app-report',
@@ -12,8 +13,8 @@ export class ReportComponent implements OnInit {
   endDate:Date;
   table:any;
   title='';
-  paid = {};
-  calc = {};
+  public paid = {};
+  public calc = {};
   data = "";
 
   constructor(private restService:RestService) { }
@@ -42,16 +43,29 @@ export class ReportComponent implements OnInit {
     }
   }
 
-  convertArrayOfObjectsToCSV(args) {
+  convertToCSV() {
   var result, ctr, keys, columnDelimiter, lineDelimiter, data;
 
-  data = args.data || null;
-  if (data == null || !data.length) {
-    return null;
-  }
+  data = [];
+  let paid = this.paid;
+  let calc = this.calc;
+  this.table.forEach(function(currentVal, index){
+    data.push({ "#":                  index + 1,
+                "ID":                 currentVal.eid,
+                "First Name":         currentVal.firstname,
+                "Surname":            currentVal.surname,
+                "Hourly Rate":        currentVal.rate.substr(1),
+                "Hours Worked":       currentVal.hours,
+                "Minutes Worked":     currentVal.mins,
+                "Minutes Took Break": currentVal.breaks,
+                "Wage Sum":           '£'+calc[currentVal.eid].toFixed(2),
+                "Wage Paid":          '£'+parseFloat(paid[currentVal.eid]).toFixed(2),
+                "Wage Remainder":     '£'+(calc[currentVal.eid]-paid[currentVal.eid]).toFixed(2)
+              });
+  });
 
-  columnDelimiter = args.columnDelimiter || ',';
-  lineDelimiter = args.lineDelimiter || '\n';
+  columnDelimiter =  ',';
+  lineDelimiter =  '\n';
 
   keys = Object.keys(data[0]);
 
@@ -74,18 +88,13 @@ export class ReportComponent implements OnInit {
 }
 
   downloadCSV(args) {
-  var data, filename, link;
+  var filename;
 
-  var csv =  this.convertArrayOfObjectsToCSV({data: this.table});
+  var csv =  this.convertToCSV();
   if (csv == null) return;
-
+  var blob = new Blob([csv], {type: 'text/csv'});
   filename = this.title + '.csv';
-
-  if (!csv.match(/^data:text\/csv/i)) {
-    csv = 'data:text/csv;charset=utf-8,' + csv;
-  }
-  this.data = encodeURI(csv);
-
+  fileSaver.saveAs(blob,filename);
 }
   ngOnInit() {
   }

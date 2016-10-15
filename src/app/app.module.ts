@@ -29,10 +29,11 @@ import { MaterialModule } from "@angular/material";
 import { DatepickerComponent } from './angular2-material-datepicker/datepicker.component';
 import { BranchTimesheetComponent } from './times/branch-timesheet.component';
 import { WorktimeComponent } from './times/worktime.component';
-import { TimerComponent } from './times/timer.component'
+import { TimerComponent } from './times/timer.component';
+import { CsvDownloadDirective } from './report/csv-download.directive'
 
 @NgModule({
-    declarations:   [AppComponent, LoginComponent, NavbarComponent, LeftbarComponent, RightbarComponent, FooterComponent, MainComponent, HomeComponent, BranchesComponent, UsersComponent, MessageFadeOutComponent, ItemsComponent, EmployeesComponent, TimesComponent, ReportComponent, EmployeeFormComponent, EmployeeFormComponent, DatepickerComponent, BranchTimesheetComponent, WorktimeComponent, TimerComponent],
+    declarations:   [AppComponent, LoginComponent, NavbarComponent, LeftbarComponent, RightbarComponent, FooterComponent, MainComponent, HomeComponent, BranchesComponent, UsersComponent, MessageFadeOutComponent, ItemsComponent, EmployeesComponent, TimesComponent, ReportComponent, EmployeeFormComponent, EmployeeFormComponent, DatepickerComponent, BranchTimesheetComponent, WorktimeComponent, TimerComponent, CsvDownloadDirective],
     imports:        [
         BrowserModule,
         // Router
