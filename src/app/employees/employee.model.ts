@@ -25,21 +25,20 @@ export class Employee{
     }
 
     toString(){
-        return this.surname + ', ' + this.firstname;
+        return this.firstname + ' ' + this.surname;
     }
 
     toObject(){
         var obj:any;
         obj = {
-            firstname:  this.firstname,
-            surname:    this.surname,
-            rate:       this.rate,
-            role:       this.isManager?'Manager':'Employee',
-            contract_date:moment(this.contractDate).format(),
+            firstname:      this.firstname,
+            surname:        this.surname,
+            rate:           this.rate,
+            role:           this.isManager?'Manager':'Employee',
+            contract_date:  moment.utc(this.contractDate).format('YYYY-MM-DD'),
+            contract_end:   this.isExpired() ? moment(this.contractEnd).toDate() : 'infinity',
         };
 
-        if(this.isExpired())
-            obj.contract_end = moment(this.contractEnd).format();
 
         return obj;
     }
@@ -57,6 +56,6 @@ export class Employee{
         this.rate      = input.rate!==undefined?input.rate.substr(1):'';
         this.isManager = input.role!==undefined?(input.role==='Manager'?true:false):false;
         this.contractDate= input.contract_date!==undefined?moment(input.contract_date).toDate():today;
-        this.contractEnd = input.contract_end ? moment(input.contract_end).toDate(): moment('1970-01-01').toDate();
+        this.contractEnd = (input.contract_end && input.contract_end !=='infinity') ? moment(input.contract_end).toDate(): moment('1970-01-01').toDate();
     }
 }

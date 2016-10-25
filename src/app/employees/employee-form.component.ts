@@ -58,9 +58,10 @@ export class EmployeeFormComponent implements OnInit {
 
   onChange(){
     if(this.isNew)
-      this.addable.emit(this.value.firstname.length>0 && this.value.surname.length>0 && parseFloat(this.value.rate)>0)
+      this.addable.emit(this.value.firstname.length>0 && parseFloat(this.value.rate)>0)
     else
-      this.updatable.emit(!this.copy.isEqual( this.value ));
+      this.updatable.emit(!this.copy.isEqual(this.value) );
+
     this.calcSubtitle();
   }
 

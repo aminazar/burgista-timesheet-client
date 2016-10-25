@@ -77,29 +77,26 @@ export class EmployeesComponent implements OnInit {
     }
 
     update(updatedItem:Employee){
-      if(updatedItem.isExpired())
-          this.showError('It is not possible to update expired records - but you can revive them by leaving "End Date" empty');
-      else{
-        var values = updatedItem.toObject();
-        var eid    = updatedItem.eid;
-        this.updateEnabled[eid]=undefined;
-        this.deleteEnabled[eid]=false;
-        this.restService.update(this.apiName, eid, updatedItem.toObject())
-          .subscribe(
-            (res:any)=>{
-              this.showMessage('"' + updatedItem + '" updated.');
-              this.updateEnabled[eid] = false;
-              this.deleteEnabled[eid] = true;
-              this.updateCount[eid]++;
-            },
-            (err:Response)=>{
-              this.updateEnabled[eid]=true;
-              this.deleteEnabled[eid]=true;
-              this.showError(err.text());
-            }
-          )
+      var eid    = updatedItem.eid;
+      var values = updatedItem.toObject();
+      this.updateEnabled[eid]=undefined;
+      this.deleteEnabled[eid]=false;
+      this.restService.update(this.apiName, eid, updatedItem.toObject())
+        .subscribe(
+          (res:any)=>{
+            this.showMessage('"' + updatedItem + '" updated.');
+            this.updateEnabled[eid] = false;
+            this.deleteEnabled[eid] = true;
+            this.updateCount[eid]++;
+          },
+          (err:Response)=>{
+            this.updateEnabled[eid]=true;
+            this.deleteEnabled[eid]=true;
+            this.showError(err.text());
+          }
+        )
 
-      }
+
     }
 
     onUpdatable(id,value){

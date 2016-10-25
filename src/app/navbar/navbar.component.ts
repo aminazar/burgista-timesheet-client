@@ -12,10 +12,11 @@ export class NavbarComponent{
   private isLoggedIn = false;
 
   constructor(private loginService: LoginService, public router: Router) {
+    var self = this;
     loginService.isLoggedIn$.subscribe((val:boolean)=>{
-      this.isLoggedIn=val;
+      self.isLoggedIn=val;
       if(val)
-        this.user = localStorage.getItem(loginService.auth_key);
+        self.user = localStorage.getItem(loginService.auth_key).toLowerCase();
     });
   }
   logout() {

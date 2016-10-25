@@ -190,7 +190,7 @@ import * as moment from 'moment'
       >
       <div
         class="datepicker__calendar"
-        *ngIf="showCalendar"
+        *ngIf="showCalendar&&!disabled"
       >
         <div class="datepicker__calendar__nav">
           <div
@@ -279,6 +279,7 @@ import * as moment from 'moment'
 export class DatepickerComponent implements OnInit, OnChanges {
   // api bindings
   @Input() accentColor: string;
+  @Input() disabled = false;
   @Input() altInputStyle: boolean;
   @Input() date: Date;
   @Input() fontFamily: string;
@@ -442,14 +443,15 @@ export class DatepickerComponent implements OnInit, OnChanges {
       this.date = new Date();
       this.setDate()
     }
-
-    this.showCalendar = !this.showCalendar;
+    if(!this.disabled)
+      this.showCalendar = !this.showCalendar;
   }
 
   onSelectDay(day: Date) {
     this.date = day;
     this.setInputText(day);
-    this.showCalendar = !this.showCalendar;
+    if(!this.disabled)
+      this.showCalendar = !this.showCalendar;
     this.onSelect.emit(day);
   }
 

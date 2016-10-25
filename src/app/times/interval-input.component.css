@@ -1,0 +1,15 @@
+input.time{
+    width:25px;
+    padding:0;
+    float: none;
+    height: 25px;
+}
+span.time{
+    background-color: #607d8b;
+    color:white;
+    border-radius:5px;
+    padding:2px;
+    margin:2px;
+    font-size:12px;
+    display: inline-block;
+}

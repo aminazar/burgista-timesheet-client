@@ -10,13 +10,15 @@ export class TimePair{
   public infinity:boolean;
 
   constructor(){
+    this.infinity = true;
+    this.nextDay  = false;
   }
 
   toFormattedDate(date:Date){
     if(this.infinity)
       return('infinity');
 
-    return moment(date).hours(this.hours).minutes(this.minutes).second(0).millisecond(0).add(this.nextDay?1:0,'d').format();
+    return moment.utc(date).hours(this.hours).minutes(this.minutes).second(0).millisecond(0).add(this.nextDay?1:0,'d').format();
   }
 
   fromDate(date:Date){

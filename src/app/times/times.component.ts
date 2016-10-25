@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {RestService} from "../rest.service";
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-times',
@@ -18,6 +19,14 @@ export class TimesComponent implements OnInit {
   constructor(private restService :RestService) {
     var today = new Date;
    this.tDate= today;
+  }
+
+  dateBack(){
+    this.tDate = moment(this.tDate).subtract(1,'days').toDate();
+  }
+
+  dateForward(){
+    this.tDate = moment(this.tDate).add(1,'days').toDate();
   }
 
   ngOnInit() {

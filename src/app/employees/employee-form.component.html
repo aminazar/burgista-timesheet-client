@@ -1,24 +1,24 @@
 <md-card [ngClass]="['md-card', isNew?(updateEnabled?'md-add':''):(updateEnabled?'md-update':(isExpired?'md-expired':''))]">
-  <md-card-title class="app-input-section">{{this.isNew ? 'New Employee' : this.value.surname + ', ' + this.value.firstname}}</md-card-title>
+  <md-card-title class="app-input-section">{{this.isNew ? 'New Employee' : this.value.toString() }}</md-card-title>
   <md-card-subtitle>{{subtitle}}</md-card-subtitle>
-  <md-input placeholder="First name" maxlength="{{nameLength}}" [(ngModel)]="value.firstname" #firstname (change)="onChange()">
+  <md-input placeholder="First name" maxlength="{{nameLength}}" [(ngModel)]="value.firstname" #firstname (change)="onChange()" [disabled]="copy.isExpired()">
     <md-hint align="end">
       {{firstname.characterCount}} / {{nameLength}}
     </md-hint>
   </md-input>
-  <md-input placeholder="Surname" maxlength="{{nameLength}}" #surname [(ngModel)]="value.surname" (change)="onChange()">
+  <md-input placeholder="Surname" maxlength="{{nameLength}}" #surname [(ngModel)]="value.surname" (change)="onChange()" [disabled]="copy.isExpired()">
     <md-hint align="end">
       {{surname.characterCount}} / {{nameLength}}
     </md-hint>
   </md-input>
-  <md-input placeholder="Rate" align="end" [(ngModel)]="value.rate" style="width:55px" (change)="onChange()">
+  <md-input placeholder="Rate" align="end" [(ngModel)]="value.rate" style="width:55px" (change)="onChange()" [disabled]="copy.isExpired()">
     <span md-prefix>£</span>
   </md-input>
-  <md-checkbox [(ngModel)]="value.isManager" (change)="onChange()">Manager</md-checkbox>
+  <md-checkbox [(ngModel)]="value.isManager" (change)="onChange()" [disabled]="copy.isExpired()">Manager</md-checkbox>
 <div class="date-group">
     <div class="input-group">
       <span class="input-group-addon date-label" id="sizing-addon2">Start Date</span>
-      <material-datepicker class="date-input" [date]="value.contractDate" (onSelect)="onStartDateSelect($event)"></material-datepicker>
+      <material-datepicker class="date-input" [date]="value.contractDate" (onSelect)="onStartDateSelect($event)" [disabled]="copy.isExpired()"></material-datepicker>
     </div>
     <div class="input-group">
       <span class="input-group-addon date-label" id="sizing-addon2">End Date</span>
