@@ -9,8 +9,7 @@ export class Interval{
   private _end:TimePair;
   public date:Date;
 
-  constructor(d:Date){
-    this.date   = d;
+  constructor(){
     this._start = new TimePair();
     this._end   = new TimePair();
   }
@@ -115,5 +114,18 @@ export class Interval{
     }
 
     return obj;
+  }
+
+  clone(){
+    var c = new Interval();
+    c.date = this.date;
+    var self = this;
+    ['_start','_end'].forEach(function(el){
+      ['hours','minutes','nextDay','infinity'].forEach(function(prop){
+        c[el][prop]=self[el][prop];
+      })
+    });
+
+    return c;
   }
 }

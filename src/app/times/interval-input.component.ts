@@ -33,8 +33,10 @@ export class IntervalInputComponent implements OnInit {
   @ViewChild('mi2') mi2;
 
   constructor(){
-    this._i = new Interval(this.date);
-    this.copy = new Interval(this.date);
+    this._i = new Interval();
+    this._i.date = this.date;
+    this.copy = new Interval();
+    this.copy.date = this.date;
   }
 
   go(event,n){
@@ -64,6 +66,8 @@ export class IntervalInputComponent implements OnInit {
   }
 
   add(){
+    if(this.btnName==='update')
+      this.beingEdited=false;
     this.vChange.emit(this._i);
   }
 

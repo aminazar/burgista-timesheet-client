@@ -4,11 +4,12 @@
 
 import { Interval } from "./interval.model";
 import { RestService } from "../rest.service";
-import {IntervalInputComponent} from "./interval-input.component";
 import * as moment from 'moment';
+import {TimePair} from "./time.model";
 
 export class WorktimeList{
   public items = {};
+  public beingEdited = {};
   private copy = {};
   
   constructor(private date:Date, private bid:any, private restService:RestService){};
@@ -24,7 +25,8 @@ export class WorktimeList{
   }
 
   load(employeeWorktime){
-    var i = new Interval(this.date);
+    var i = new Interval();
+    i.date = this.date;
 
     if(employeeWorktime.wtid){
       i.startDateTime = employeeWorktime.start_time;
@@ -35,34 +37,44 @@ export class WorktimeList{
       if(employeeWorktime.wtid) {
         this.copy[employeeWorktime.wtid] = i;
         this.items[employeeWorktime.eid].worktimes[employeeWorktime.wtid] = i;
+        this.beingEdited[employeeWorktime.eid][employeeWorktime.wtid]=false;
       }
     }
     else{
       let obj = {};
-      if(employeeWorktime.wtid)
+      this.beingEdited[employeeWorktime.eid] = {};
+      if(employeeWorktime.wtid) {
         obj[employeeWorktime.wtid] = i;
+        this.beingEdited[employeeWorktime.eid][employeeWorktime.wtid]=false;
+      }
 
       this.items[employeeWorktime.eid] = {
         worktimes:  obj,
         name:       employeeWorktime.firstname + ' ' + employeeWorktime.surname,
-        nobreak:    Boolean(employeeWorktime.nobreak)
+        nobreak:    Boolean(employeeWorktime.nobreak),
       }
     }
   }
 
-  add(eid,worktime:Interval,noBreak = this.items[eid].nobreak){
+  add(eid,wt:Interval,noBreak = this.items[eid].nobreak){
+    var self = this;
+
     var addCallback = function(){
-      var self = this;
-      this.restService.insert('t/' + self.bid + '/' + eid, worktime.toObject(noBreak))
+      var worktime = wt.clone();
+
+      self.restService.insert('t/' + self.bid + '/' + eid, worktime.toObject(noBreak))
         .subscribe(
           (wtid:any)=>{
             self.items[eid].worktimes[wtid]=worktime;
+            wt.start=new TimePair();
+            wt.end=new TimePair();
           },
           (err)=>{
             console.log('error while adding worktime:',err);
           }
         );
     }
+
     var formattedDate = moment(this.date).format('YYYY-MM-DD');
     if(noBreak)
       this.restService.insert('nobreak',{eid: eid, date:formattedDate, bid: this.bid}).subscribe(()=>{console.log('nobreak added');addCallback()});
@@ -81,6 +93,7 @@ export class WorktimeList{
         },
         (err)=>{
           this.items[eid].worktimes[wtid]=this.copy[wtid];
+          this.beingEdited[eid][wtid]=false;
           console.log('error while updaing worktime:',err);
         }
     );

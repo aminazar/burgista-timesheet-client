@@ -32,10 +32,9 @@ import { WorktimeComponent } from './times/worktime.component';
 import { TimerComponent } from './times/timer.component';
 import { IntervalInputComponent } from './times/interval-input.component';
 import { Ng2AutoCompleteModule } from 'ng2-auto-complete';
-import { TimeRowComponent } from './times/time-row.component';
 
 @NgModule({
-    declarations:   [AppComponent, LoginComponent, NavbarComponent, LeftbarComponent, RightbarComponent, FooterComponent, MainComponent, HomeComponent, BranchesComponent, UsersComponent, MessageFadeOutComponent, ItemsComponent, EmployeesComponent, TimesComponent, ReportComponent, EmployeeFormComponent, EmployeeFormComponent, DatepickerComponent, BranchTimesheetComponent, WorktimeComponent, TimerComponent, IntervalInputComponent, TimeRowComponent],
+    declarations:   [AppComponent, LoginComponent, NavbarComponent, LeftbarComponent, RightbarComponent, FooterComponent, MainComponent, HomeComponent, BranchesComponent, UsersComponent, MessageFadeOutComponent, ItemsComponent, EmployeesComponent, TimesComponent, ReportComponent, EmployeeFormComponent, EmployeeFormComponent, DatepickerComponent, BranchTimesheetComponent, WorktimeComponent, TimerComponent, IntervalInputComponent],
     imports:        [
         BrowserModule,
         AppRoutes,

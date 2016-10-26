@@ -23,7 +23,7 @@
     <td>{{list.items[k].name}}</td>
     <td>
       <span *ngFor="let wtid of workTimeIDs(k)">
-      <app-interval-input [date]="_date" [initValue]="list.items[k].worktimes[wtid]" (vChange)="list.update(k,wtid,$event,this);this.beingEdited=false" (deleted)="list.delete(k,wtid)" [btnName]="'update'"></app-interval-input>
+      <app-interval-input [date]="_date" [initValue]="list.items[k].worktimes[wtid]" (vChange)="list.update(k,wtid,$event)" [beingEdited]="list.beingEdited[k][wtid]" (deleted)="list.delete(k,wtid)" [btnName]="'update'"></app-interval-input>
       </span>
       <div style="width:100%;border-top:1px solid beige"><app-interval-input [beingEdited]="true" [date]="_date" (vChange)="list.add(k,$event)"></app-interval-input></div>
     </td>
