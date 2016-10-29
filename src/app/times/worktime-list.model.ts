@@ -31,6 +31,8 @@ export class WorktimeList{
     if(employeeWorktime.wtid){
       i.startDateTime = employeeWorktime.start_time;
       i.endDateTime   = employeeWorktime.end_time;
+      i.breakMinutes  = employeeWorktime.breaktime?employeeWorktime.breaktime:0;
+      i.nobreak       = Boolean(employeeWorktime.nobreak);
     }
 
     if(this.items[employeeWorktime.eid]){
@@ -62,9 +64,10 @@ export class WorktimeList{
     var addCallback = function(){
       var worktime = wt.clone();
 
-      self.restService.insert('t/' + self.bid + '/' + eid, worktime.toObject(noBreak))
+      self.restService.insert('t/' + self.bid + '/' + eid, worktime.toObject())
         .subscribe(
           (wtid:any)=>{
+            self.items[eid].nobreak = noBreak;
             self.items[eid].worktimes[wtid]=worktime;
             wt.start=new TimePair();
             wt.end=new TimePair();
@@ -84,7 +87,7 @@ export class WorktimeList{
   }
 
   update(eid,wtid,i){
-    this.restService.update('t', wtid, i.toObject(this.items[eid].nobreak))
+    this.restService.update('t', wtid, i.toObject())
       .subscribe(
         ()=>{
           console.log('worktime ' + wtid + 'updated');
@@ -104,6 +107,7 @@ export class WorktimeList{
     var self = this;
     var callback = function(){
       for(var wtid in self.items[eid].worktimes) {
+        self.items[eid].worktimes[wtid].nobreak=self.items[eid].nobreak;
         self.update(eid, wtid, self.items[eid].worktimes[wtid]);
       }
     }

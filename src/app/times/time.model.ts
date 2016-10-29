@@ -18,11 +18,11 @@ export class TimePair{
     if(this.infinity)
       return('infinity');
 
-    return moment.utc(date).hours(this.hours).minutes(this.minutes).second(0).millisecond(0).add(this.nextDay?1:0,'d').format();
+    return moment(date).hours(this.hours).minutes(this.minutes).add(this.nextDay?1:0,'d').format('YYYY-MM-DDTHH:mm:00');
   }
 
   fromDate(date:Date){
-    if(isNaN(date.getHours()))
+    if(!moment(date).isValid())
       this.infinity=true;
     else{
       this.hours=moment(date).hours();

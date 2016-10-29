@@ -42,7 +42,7 @@ export class BranchTimesheetComponent implements OnInit {
 
   addNew(i:Interval){
     if(this.addedEmp.id){
-      this.list.add(this.addedEmp.id,i,!this.addedEmpNoBreaks);
+      this.list.add(this.addedEmp.id,i,this.addedEmpNoBreaks);
       this.addedEmp="";
     }
   }

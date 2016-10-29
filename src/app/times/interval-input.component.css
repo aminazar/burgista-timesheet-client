@@ -3,6 +3,7 @@ input.time{
     padding:0;
     float: none;
     height: 25px;
+    text-align: center;
 }
 span.time{
     background-color: #607d8b;
