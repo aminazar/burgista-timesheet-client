@@ -6,12 +6,23 @@ import { Interval } from "./interval.model";
 import { RestService } from "../rest.service";
 import * as moment from 'moment';
 import {TimePair} from "./time.model";
+import {Response} from "@angular/http";
 
 export class WorktimeList{
   public items = {};
   public beingEdited = {};
   private copy = {};
-  
+  private _message="";
+
+  get message(){
+    return this._message;
+  }
+
+  set message(m){
+    if(m===this._message)
+      m+=' ';
+    this._message = m;
+  }
   constructor(private date:Date, private bid:any, private restService:RestService){};
 
   get toArray(){
@@ -72,7 +83,8 @@ export class WorktimeList{
             wt.start=new TimePair();
             wt.end=new TimePair();
           },
-          (err)=>{
+          (err:Response)=>{
+            self.message = err.text();
             console.log('error while adding worktime:',err);
           }
         );
@@ -94,9 +106,10 @@ export class WorktimeList{
           this.copy[wtid]=i;
           this.items[eid].worktimes[wtid] = i;
         },
-        (err)=>{
+        (err:Response)=>{
           this.items[eid].worktimes[wtid]=this.copy[wtid];
           this.beingEdited[eid][wtid]=false;
+          this.message=err.text();
           console.log('error while updaing worktime:',err);
         }
     );
@@ -125,7 +138,8 @@ export class WorktimeList{
           delete this.items[eid].worktimes[wtid];
           delete this.copy[wtid];
         },
-        (err)=>{
+        (err:Response)=>{
+          this.message=err.text();
           console.log('error while deleting worktime:', err);
         }
     );

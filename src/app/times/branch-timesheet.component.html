@@ -14,11 +14,12 @@
 <md-card-content>
 <table class="table">
   <tr><th>Name</th><th>Times</th><th>No Breaks</th></tr>
-  <tr>
+  <tr *ngIf="vacantEmps.length>0">
     <td><input auto-complete [(ngModel)]="addedEmp" [source]="vacantEmps"/></td>
     <td><app-interval-input [date]="_date" [beingEdited]="true" (vChange)="addNew($event)" [nobreak]="addedEmpNoBreaks"></app-interval-input></td>
     <td><md-checkbox [(ngModel)]="addedEmpNoBreaks"></md-checkbox></td>
   </tr>
+  <tr><td colspan="3"><app-message-fade-out [bgClass]="'warning'" [message]="list.message"></app-message-fade-out></td></tr>
   <tr *ngFor="let k of engagedEmps">
     <td>{{list.items[k].name}}</td>
     <td>
