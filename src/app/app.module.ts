@@ -28,13 +28,11 @@ import { EmployeeFormComponent } from './employees/employee-form.component';
 import { MaterialModule } from "@angular/material";
 import { DatepickerComponent } from './angular2-material-datepicker/datepicker.component';
 import { BranchTimesheetComponent } from './times/branch-timesheet.component';
-import { WorktimeComponent } from './times/worktime.component';
-import { TimerComponent } from './times/timer.component';
 import { IntervalInputComponent } from './times/interval-input.component';
 import { Ng2AutoCompleteModule } from 'ng2-auto-complete';
 
 @NgModule({
-    declarations:   [AppComponent, LoginComponent, NavbarComponent, LeftbarComponent, RightbarComponent, FooterComponent, MainComponent, HomeComponent, BranchesComponent, UsersComponent, MessageFadeOutComponent, ItemsComponent, EmployeesComponent, TimesComponent, ReportComponent, EmployeeFormComponent, EmployeeFormComponent, DatepickerComponent, BranchTimesheetComponent, WorktimeComponent, TimerComponent, IntervalInputComponent],
+    declarations:   [AppComponent, LoginComponent, NavbarComponent, LeftbarComponent, RightbarComponent, FooterComponent, MainComponent, HomeComponent, BranchesComponent, UsersComponent, MessageFadeOutComponent, ItemsComponent, EmployeesComponent, TimesComponent, ReportComponent, EmployeeFormComponent, EmployeeFormComponent, DatepickerComponent, BranchTimesheetComponent, IntervalInputComponent],
     imports:        [
         BrowserModule,
         AppRoutes,

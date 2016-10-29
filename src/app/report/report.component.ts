@@ -9,8 +9,8 @@ let fileSaver = require('file-saver/FileSaver.min.js');
   styleUrls: ['./report.component.css']
 })
 export class ReportComponent implements OnInit {
-  startDate:Date;
-  endDate:Date;
+  startDate   = moment().subtract(1,'months').toDate();
+  endDate     = moment().toDate();
   table:any;
   title='';
   public paid = {};
@@ -97,6 +97,7 @@ export class ReportComponent implements OnInit {
   fileSaver.saveAs(blob,filename);
 }
   ngOnInit() {
+    this.check();
   }
 
 }
