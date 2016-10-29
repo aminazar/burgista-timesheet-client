@@ -120,6 +120,10 @@ export class Interval{
     return this._end.toFormattedDate(this.date);
   }
 
+  toString(){
+    return moment(this.startDateTime).format('HH:mm') + ' to ' + moment(this.endDateTime).format('HH:mm');
+  }
+
   duration(){
     if(this.endDateTime && this.startDateTime) {
       var d = moment(this.endDateTime).diff(moment(this.startDateTime), 'hours', true) - this.breakMinutes/60;
