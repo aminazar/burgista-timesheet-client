@@ -38,13 +38,7 @@ export class Interval{
   set start(s:TimePair){
     this._start = s;
     this._start.infinity=!(s.minutes&&s.hours);
-    if(!s.infinity){
-      if(this._end.infinity) {
-        this._end.infinity = false;
-        this._end.hours = s.hours;
-        this._end.minutes = s.minutes;
-      }
-
+    if(!s.infinity && !this._end.infinity) {
       if(this._end.hours * 60 + this._end.minutes * 1 < s.hours * 60 + s.minutes * 1){
         this.nextDay = true;
       }
@@ -59,20 +53,14 @@ export class Interval{
     return this._start;
   }
 
-  set end(e:TimePair){
+  set end(e:TimePair) {
     this._end = e;
-    this._end.infinity=!(e.minutes&&e.hours);
-    if(!e.infinity){
-      if(this._start.infinity) {
-        this._start.infinity = false;
-        this._start.hours = e.hours;
-        this._start.minutes = e.minutes;
-      }
-
-      if(this._start.hours * 60 + this._start.minutes * 1 > e.hours * 60 + e.minutes * 1){
+    this._end.infinity = !(e.minutes && e.hours);
+    if (!e.infinity && !this._start.infinity) {
+      if (this._start.hours * 60 + this._start.minutes * 1 > e.hours * 60 + e.minutes * 1) {
         this.nextDay = true;
       }
-      else{
+      else {
         this.nextDay = false;
       }
     }
@@ -126,7 +114,7 @@ export class Interval{
 
   duration(){
     if(this.endDateTime && this.startDateTime) {
-      var d = moment(this.endDateTime).diff(moment(this.startDateTime), 'hours', true) - this.breakMinutes/60;
+      var d = moment(this.endDateTime,'YYYY-MM-DDTHH:mm:ss').diff(moment(this.startDateTime,'YYYY-MM-DDTHH:mm:ss'), 'hours', true) - this.breakMinutes/60;
       if(!isNaN(d))
         return Math.floor(d) + 'hrs ' + Math.round((d - Math.floor(d)) * 60) + ' mins' + ( (this.breakMinutes)? ' ('+this.breakMinutes+'mins break)' : '' );
       return '';
@@ -137,7 +125,6 @@ export class Interval{
     var minuteDiff = moment(this.endDateTime).diff(moment(this.startDateTime),'minutes');
     if(minuteDiff<0)
       throw('invalid interval: start is ' + (-minuteDiff) + ' after end');
-201
     var obj = {
       start:    this.startDateTime,
       end:      this.endDateTime,

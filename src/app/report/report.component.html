@@ -1,40 +1,48 @@
 From
-<div style="padding-bottom:10px;margin-bottom:5px;">
+<div class="rtpDatePicker">
   <material-datepicker class="date-input" [date]="startDate" (onSelect)="onStartSelect($event)"></material-datepicker>
 </div>
 To
-<div style="padding-bottom:10px;margin-bottom:5px;">
+<div class="rtpDatePicker">
   <material-datepicker class="date-input" [date]="endDate" (onSelect)="onEndSelect($event)"></material-datepicker>
 </div>
-<md-card class="md-card">
-  <md-card-title>{{title}}</md-card-title>
-  <md-card-content>
-    <div class="panel panel-default">
-      <!-- Default panel contents -->
-      <button type="button" class="btn btn-default btn-lg" (click)="downloadCSV()">
-        <span class="glyphicon download-alt" aria-hidden="true"></span> Download
-      </button>
+<md-tab-group (selectChange)="changeBranch($event)">>
+  <md-tab *ngFor="let branch of branches">
+    <template md-tab-label>{{branch.name}}</template>
+    <template md-tab-content>
 
-      <div class="panel-heading">Employees timesheet report</div>
+      <md-card class="md-card">
+        <md-card-title>{{title}}</md-card-title>
+        <md-card-content>
+          <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <button type="button" class="btn btn-default btn-lg" (click)="downloadCSV()">
+              <span class="glyphicon download-alt" aria-hidden="true"></span> Download
+            </button>
 
-      <!-- Table -->
-      <table class="table">
-        <th>Firstname</th><th>Surname</th><th>Rate</th><th>Hours</th><th>Mins</th><th>Breaks</th><th>Sum</th><th>Paid</th><th>Remainder</th>
-        <tr *ngFor="let row of table">
-          <td>{{row.firstname}}</td>
-          <td>{{row.surname}}</td>
-          <td>{{row.rate.substr(1)}}</td>
-          <td>{{row.hours}}</td>
-          <td>{{row.mins}}</td>
-          <td>{{row.breaks}}</td>
-          <td>{{calc[row.eid].toFixed(2)}}</td>
-          <td><input style="width:65px" [(ngModel)]="paid[row.eid]"/></td>
-          <td>{{(calc[row.eid]-paid[row.eid]).toFixed(2)}}</td>
-        </tr>
-      </table>
-      </div>
-  </md-card-content>
-  <md-card-actions>
+            <div class="panel-heading">Employees timesheet report</div>
 
-  </md-card-actions>
-</md-card>
+            <!-- Table -->
+            <table class="table">
+              <th>Firstname</th><th>Surname</th><th>Rate</th><th>Hours</th><th>Mins</th><th>Breaks</th><th>Sum</th><th>Paid</th><th>Remainder</th>
+              <tr *ngFor="let row of table">
+                <td>{{row.firstname}}</td>
+                <td>{{row.surname}}</td>
+                <td>{{row.rate.substr(1)}}</td>
+                <td>{{row.hours}}</td>
+                <td>{{row.mins}}</td>
+                <td>{{row.breaks}}</td>
+                <td>{{calc[row.eid].toFixed(2)}}</td>
+                <td><input style="width:65px" [(ngModel)]="paid[row.eid]"/></td>
+                <td>{{(calc[row.eid]-paid[row.eid]).toFixed(2)}}</td>
+              </tr>
+            </table>
+          </div>
+        </md-card-content>
+        <md-card-actions>
+
+        </md-card-actions>
+      </md-card>
+
+    </template>
+  </md-tab>

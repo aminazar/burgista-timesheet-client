@@ -15,6 +15,10 @@ export class ReportComponent implements OnInit {
   title='';
   public paid = {};
   public calc = {};
+
+  private allBranch = {bid:'ALL',name:'All'};
+  public curBranch = this.allBranch.bid;
+  public branches = [this.allBranch];
   data = "";
 
   constructor(private restService:RestService) { }
@@ -29,8 +33,8 @@ export class ReportComponent implements OnInit {
   }
   check(){
     if(this.startDate && this.endDate && this.startDate <= this.endDate) {
-      this.title = 'From ' + moment(this.startDate).format('DD MMM YY') + ' To ' + moment(this.endDate).format('DD MMM YY');
-      this.restService.getWithParams('report/ALL/ALL', {start: moment(this.startDate).format('YYYY-MM-DDTHH:mm:ss')+'Z', end: moment(this.endDate).format('YYYY-MM-DDTHH:mm:ss')+'Z'})
+      this.title = this.branches.find((el)=>el.bid===this.curBranch).name + ' - From ' + moment(this.startDate).format('DD MMM YY') + ' To ' + moment(this.endDate).format('DD MMM YY');
+      this.restService.getWithParams('report/'+this.curBranch+'/ALL', {start: moment(this.startDate).format('YYYY-MM-DD'), end: moment(this.endDate).format('YYYY-MM-DD')})
         .subscribe(
           (data)=>{
             this.table = data;
@@ -97,7 +101,13 @@ export class ReportComponent implements OnInit {
   fileSaver.saveAs(blob,filename);
 }
   ngOnInit() {
+    this.restService.get('branches')
+      .subscribe((res:any)=>{this.branches=[this.allBranch].concat(res)},(err:any)=>console.log('Failed to get branches',err));
     this.check();
   }
 
+  changeBranch(i){
+    this.curBranch=this.branches[i.index].bid;
+    this.check();
+  }
 }

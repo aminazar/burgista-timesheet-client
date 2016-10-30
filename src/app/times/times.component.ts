@@ -33,8 +33,4 @@ export class TimesComponent implements OnInit {
     this.restService.get('branches')
       .subscribe((res:any)=>{this.branches=res;this.curBranch=res[0];},(err:any)=>console.log('Failed to get branches',err));
   }
-
-  changeBranch(bid){
-    this.curBranch=this.branches.find(el=>el.bid===bid);
-  }
 }

@@ -30,12 +30,23 @@ export class EmployeesComponent implements OnInit {
         this.deleteEnabled[id]=undefined;
         this.restService.delete(this.apiName, id )
             .subscribe((res:any)=>{
-                    this.showMessage( 'deleted successfully '+ res.json() + ' row(s)');
-                    var ind = this.items.findIndex((el)=>el.eid===id);
-                    if(ind !== -1){
+                    let r = res.json;
+                    let ind = this.items.findIndex((el)=>el.eid === id);
+                    if(r>0) {
+                      this.showMessage('deleted successfully ' + r + ' row');
+
+                      if (ind !== -1) {
                         this.items.splice(ind, 1);
                         delete this.updateEnabled[id];
                         delete this.deleteEnabled[id];
+                      }
+                    }
+                    else {
+                      this.showMessage('As employee record has worktimes it cannot be deleted. End of contract is set to today.');
+
+                      if(ind !== -1){
+                        this.items[ind].contractEnd = new Date();
+                      }
                     }
                 },
                 (err: Response)=> {
@@ -47,33 +58,27 @@ export class EmployeesComponent implements OnInit {
     }
 
     add(newItem:Employee) {
-        var ind = this.items.findIndex((el)=>newItem.sameName(el));
-        if( ind !== -1 ){
-            this.showError('"'+ newItem + '" already exists.')
-        }
-        else{
-            this.addEnabled=false;
-            this.restService.insert(this.apiName, newItem.toObject())
-                .subscribe((res:any)=> {
-                        this.addEnabled=true;
-                        this.showMessage('Row "' + newItem + '" added.');
-                        var eid = res.json();
+      this.addEnabled=false;
+      this.restService.insert(this.apiName, newItem.toObject())
+          .subscribe((res:any)=> {
+                  this.addEnabled=true;
+                  this.showMessage('Row "' + newItem + '" added.');
+                  var eid = res.json();
 
-                        var newItemC = newItem.toObject();
-                        newItemC.rate = '$' + newItem.rate; //to be similar with postgress output
-                        newItem = new Employee({});
-                        var newItemO = new Employee(newItemC);
-                        newItemO.eid = eid;
-                        this.updateEnabled[eid]=false;
-                        this.deleteEnabled[eid]=true;
-                        this.items.push(newItemO);
-                    },
-                    (err:Response)=>{
-                        this.showError(err.text());
-                        this.addEnabled=true;
-                    }
-                );
-        }
+                  var newItemC = newItem.toObject();
+                  newItemC.rate = '$' + newItem.rate; //to be similar with postgress output
+                  newItem = new Employee({});
+                  var newItemO = new Employee(newItemC);
+                  newItemO.eid = eid;
+                  this.updateEnabled[eid]=false;
+                  this.deleteEnabled[eid]=true;
+                  this.items.push(newItemO);
+              },
+              (err:Response)=>{
+                  this.showError(err.text());
+                  this.addEnabled=true;
+              }
+          );
     }
 
     update(updatedItem:Employee){

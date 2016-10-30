@@ -31,6 +31,12 @@ export class TimePair{
     }
   }
 
+  toString(el='hours'){
+    if(!this.infinity)
+      return (''+this[el]).length<2?'0'+this[el]:''+this[el];
+    return '';
+  }
+
   now(){
     this.infinity=false;
     this.minutes=moment().minutes();
