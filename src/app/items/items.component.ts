@@ -15,6 +15,8 @@ export class ItemsComponent implements OnInit{
   public errMessage = "";
   public beingEdited = {};
   private copy = {};
+  private active={};
+  private pending={};
 
   @Input('table') tableName: String;
   @Input('api') apiName: String;
@@ -39,16 +41,40 @@ export class ItemsComponent implements OnInit{
     this.btnLabel='Adding...';
     this.btnEnabled= false;
   }
+  resetPwd(id){
+    if(!this.active[id] && !this.pending[id]) {
+      this.restService.insert('reset/' + id, {email:this.items.find(el=>el[this.idColumn]===id)[this.valueColumn]})
+        .subscribe(
+          (res:any)=> {
+            this.showMessage('Sent a new invitation to this user.');
+            this.pending[id] = true;
+            this.active[id] = false;
+          },
+          (err:Response)=> {
+            this.showError('Could not sent a new invitation to this user: ' + err.text());
+          }
+        )
+    }
+  }
+
   remove(id){
     console.log('remove',id);
     this.restService.delete(this.apiName, id )
         .subscribe((res:any)=>{
-              this.showMessage( 'deleted successfully '+ res.json() + ' row(s)');
-              if(res.json() !== 0) {
-                var ind = this.items.findIndex((el)=>el[this.idColumn]=== id);
+            var ind = this.items.findIndex((el)=>el[this.idColumn]=== id);
+
+            if(res.json() > 0) {
+                this.showMessage( 'deleted successfully '+ res.json() + ' row(s)');
                 this.items.splice(ind, 1);
                 delete this.beingEdited[id];
                 delete this.copy[id];
+                delete this.active[id];
+                delete this.pending[id];
+              }
+              else if(res.json()===-1){
+                this.showMessage('There are references to this user in worktime records as modifier - so it cannot be deleted but the account is deactivated and the user will not be able to login anymore.');
+                this.active[id]=false;
+                this.pending[id]=false;
               }
             },
             (err: Response)=> this.showError(err.text())
@@ -81,11 +107,14 @@ export class ItemsComponent implements OnInit{
                 };
 
                 var newRow = {};
-                newRow[this.idColumn]    = res.json();
+                var id = res.json();
+                newRow[this.idColumn]    = id;
                 newRow[this.valueColumn] = this.newItem;
-                this.beingEdited[res.json()]=false;
-                this.copy[res.json()]= this.newItem;
+                this.beingEdited[id]=false;
+                this.copy[id]= this.newItem;
                 this.items.push(newRow);
+                this.active[id]=false;
+                this.pending[id]=true;
               },
               (err:Response)=>{this.enableButton(); this.showError(err.text());}
           );
@@ -141,8 +170,11 @@ export class ItemsComponent implements OnInit{
             this.items = res;
 
             res.forEach((item) => {
-              this.beingEdited[item[this.idColumn]]=false;
-              this.copy[item[this.idColumn]] = item[this.valueColumn];
+              var id = item[this.idColumn];
+              this.beingEdited[id]=false;
+              this.copy[id] = item[this.valueColumn];
+              this.active[id]=item.active;
+              this.pending[id]=item.pending > 0;
             });
           },
           (err:any)=>console.log('Failed to get items',err)

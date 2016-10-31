@@ -27,16 +27,16 @@ export class MessageFadeOutComponent{
     this._message=msg;
     this.opacity = 1;
     this.height='auto';
-    this.transition = 'opacity '+ (msg.length / 30.0).toString() +'s ease-out, ' +
-                      'height ' + (msg.length / 30.0).toString() +'s ease-out';
+    this.transition = 'opacity '+ (msg.length/500).toString() +'s ease-out, ' +
+                      'height ' + (msg.length/500).toString() +'s ease-out';
 
     setTimeout(()=>{
       this.opacity=0;
       this.height='0px';
-      this.transition='opacity ' + (msg.length / 20.0).toString() +'s ease-out, ' +
-                      'height ' + (msg.length / 20.0).toString() +'s ease-out, ';
+      this.transition='opacity ' + (msg.length/500).toString() +'s ease-out, ' +
+                      'height ' + (msg.length/500).toString() +'s ease-out, ';
 
-    },msg.length / .03 );
+    },msg.length * 30 );
   }
   get message(){
     return this._message;
