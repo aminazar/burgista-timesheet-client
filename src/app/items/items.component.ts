@@ -104,10 +104,12 @@ export class ItemsComponent implements OnInit {
             switch (this.apiName) {
               case 'user':
                 this.showMessage('An email has been sent to "' + this.newItem + '" asking them to set a password.');
+                this.active[id] = false;
                 this.pending[id] = true;
                 break;
               case 'branch':
                 this.showMessage('Congratulations! "' + this.newItem + '" is added to the branches.');
+                this.active[id] = true;
                 break;
               default:
                 this.showMessage('Row "' + this.newItem + '" added.');
@@ -119,8 +121,6 @@ export class ItemsComponent implements OnInit {
             this.beingEdited[id] = false;
             this.copy[id] = this.newItem;
             this.items.push(newRow);
-            this.active[id] = false;
-
           },
           (err:Response)=> {
             this.enableButton();
