@@ -11,12 +11,16 @@ export class Employee{
     public isManager:boolean;
     public contractDate:Date;
     public contractEnd:Date;
+    public username:string;
+    public password:string;
 
     isEqual(other:Employee){
         return  this.sameName(other) &&
                 Math.round(parseFloat(this.rate)*100) === Math.round(parseFloat(other.rate)*100) &&
                 this.contractDate === other.contractDate &&
-                this.contractEnd === other.contractEnd;
+                this.contractEnd === other.contractEnd &&
+                this.password   === other.password &&
+                this.username   === other.username
     }
 
     sameName(other:Employee){
@@ -37,6 +41,8 @@ export class Employee{
             role:           this.isManager?'Manager':'Employee',
             contract_date:  moment.utc(this.contractDate).format('YYYY-MM-DD'),
             contract_end:   this.isExpired() ? moment(this.contractEnd).toDate() : 'infinity',
+            username:       this.username,
+            password:       this.password,
         };
 
 
@@ -57,5 +63,7 @@ export class Employee{
         this.isManager = input.role!==undefined?(input.role==='Manager'?true:false):false;
         this.contractDate= input.contract_date!==undefined?moment(input.contract_date).toDate():today;
         this.contractEnd = (input.contract_end && input.contract_end !=='infinity') ? moment(input.contract_end).toDate(): moment('1970-01-01').toDate();
+        this.username   = (input.role==='Manager')?input.username:'';
+        this.password   = (input.role==='Manager')?input.password:'';
     }
 }

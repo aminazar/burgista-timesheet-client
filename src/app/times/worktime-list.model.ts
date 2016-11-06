@@ -79,7 +79,7 @@ export class WorktimeList{
         .subscribe(
           (wtid:any)=>{
             self.items[eid].nobreak = noBreak;
-            self.items[eid].worktimes[wtid]=worktime;
+            self.items[eid].worktimes[wtid.json()]=worktime;
             wt.start=new TimePair();
             wt.end=new TimePair();
           },

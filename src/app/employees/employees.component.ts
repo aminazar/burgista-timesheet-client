@@ -30,7 +30,7 @@ export class EmployeesComponent implements OnInit {
         this.deleteEnabled[id]=undefined;
         this.restService.delete(this.apiName, id )
             .subscribe((res:any)=>{
-                    let r = res.json;
+                    let r = res.json();
                     let ind = this.items.findIndex((el)=>el.eid === id);
                     if(r>0) {
                       this.showMessage('deleted successfully ' + r + ' row');
@@ -59,7 +59,7 @@ export class EmployeesComponent implements OnInit {
 
     add(newItem:Employee) {
       this.addEnabled=false;
-      this.restService.insert(this.apiName, newItem.toObject())
+      this.restService.insert(newItem.isManager?'manager':this.apiName, newItem.toObject())
           .subscribe((res:any)=> {
                   this.addEnabled=true;
                   this.showMessage('Row "' + newItem + '" added.');

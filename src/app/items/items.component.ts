@@ -154,7 +154,8 @@ export class ItemsComponent implements OnInit {
   }
 
   letUpdate(id) {
-    this.beingEdited[id] = true;
+    if(this.idColumn==='bid')
+      this.beingEdited[id] = true;
   }
 
   showError(err) {
@@ -181,6 +182,9 @@ export class ItemsComponent implements OnInit {
 
           res.forEach((item) => {
             var id = item[this.idColumn];
+            if(item.firstname){
+              item[this.valueColumn] += ' (' + item.firstname + (item.surname?' ' + item.surname+')':')');
+            }
             this.beingEdited[id] = false;
             this.copy[id] = item[this.valueColumn];
             this.active[id] = item.active;

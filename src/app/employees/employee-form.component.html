@@ -15,6 +15,10 @@
     <span md-prefix>£</span>
   </md-input>
   <md-checkbox [(ngModel)]="value.isManager" (change)="onChange()">Manager</md-checkbox>
+  <div *ngIf="value.isManager&&isNew">†
+    <md-input placeholder="Username" [(ngModel)]="value.username" #username (change)="onChange()"></md-input>
+    <md-input type="Password"  placeholder="Password" [(ngModel)]="value.password" #password (change)="onChange()"></md-input>
+  </div>
 <div class="date-group">
     <div class="input-group">
       <span class="input-group-addon date-label" id="sizing-addon2">Start Date</span>

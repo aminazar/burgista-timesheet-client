@@ -20,4 +20,5 @@ span.updating{
     padding:2px;
     margin:2px;
     font-size:12px;
+    display:inline-block;
 }

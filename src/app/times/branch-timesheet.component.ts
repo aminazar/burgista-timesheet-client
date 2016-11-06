@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input, ViewChild} from '@angular/core';
 import {RestService} from "../rest.service";
 import * as moment from 'moment';
 import {WorktimeList} from "./worktime-list.model";
@@ -17,6 +17,7 @@ export class BranchTimesheetComponent implements OnInit {
   public addedEmp:any = "";
   public addedEmpNoBreaks = false;
   private _date;
+  @ViewChild('newEmp') newEmpElement;
   @Input() bid;
   @Input() name;
   @Input()
@@ -42,8 +43,10 @@ export class BranchTimesheetComponent implements OnInit {
 
   addNew(i:Interval){
     if(this.addedEmp.id){
-      this.list.add(this.addedEmp.id,i,this.addedEmpNoBreaks);
+      var newEmp = i.clone();
+      this.list.add(this.addedEmp.id,newEmp,this.addedEmpNoBreaks);
       this.addedEmp="";
+      this.newEmpElement.nativeElement.focus();
     }
   }
 

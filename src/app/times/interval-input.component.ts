@@ -29,10 +29,10 @@ export class IntervalInputComponent implements OnInit {
   }
 
   set initVal(i:Interval){
-    this._i = i;
+    this._i = i.clone();
     this.nobreak = i.nobreak;
     this._i.date = this.date;
-    this.copy = i;
+    this.copy = i.clone();
     this.copy.date=this.date;
   }
   @Output() vChange:EventEmitter<Interval> = new EventEmitter<Interval>();
@@ -44,6 +44,7 @@ export class IntervalInputComponent implements OnInit {
   @ViewChild('mi1') mi1;
   @ViewChild('hi2') hi2;
   @ViewChild('mi2') mi2;
+  @ViewChild('btn') btn;
 
   constructor(){
     this._i = new Interval();
@@ -51,7 +52,7 @@ export class IntervalInputComponent implements OnInit {
   }
 
   go(event,n){
-    var ref = [this.hi1, this.mi1, this.hi2, this.mi2];
+    var ref = [this.hi1, this.mi1, this.hi2, this.mi2, this.btn];
     if(event.keyCode===9&&!event.shiftKey)//tab
       return;
 
@@ -72,15 +73,21 @@ export class IntervalInputComponent implements OnInit {
           this._i[n < 3 ? 'start' : 'end'] = newTP;
           if (ref[n]) {
             ref[n].nativeElement.focus();
-            ref[n].nativeElement.select();
+            if(n<4)
+              ref[n].nativeElement.select();
           }
         }
       }
     }
     else{//shift+tab or left arrow
-      if(n>1)
-        ref[n-2].nativeElement.focus();
-        ref[n-2].nativeElement.select();
+      if(n>1) {
+        ref[n - 2].nativeElement.focus();
+        ref[n - 2].nativeElement.select();
+      }
+      else{
+        ref[0].nativeElement.focus();
+        ref[0].nativeElement.select();
+      }
     }
   }
 
@@ -89,7 +96,8 @@ export class IntervalInputComponent implements OnInit {
     this.copy.date = this.date;
     if(this.btnName==='update')
       this.beingEdited=false;
-    this.vChange.emit(this._i);
+
+    this.vChange.emit(this._i.clone());
   }
 
   editStart(){
