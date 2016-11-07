@@ -10,18 +10,10 @@ import {Interval} from "./interval.model";
 export class IntervalInputComponent implements OnInit {
   private _i:Interval;
   private copy:Interval;
-  private _nobreak:boolean;
+
   @Input() btnName = "add";
   @Input() beingEdited = false;
-  @Input('nobreak')
-  get nobreak(){
-    return this._nobreak;
-  }
-  set nobreak(nb){
-    this._nobreak=nb;
-    if(this.beingEdited)//changing 'no-break' checkbox affects 'not being edited' inputs with another mechanism
-      this._i.nobreak =  nb;
-  }
+
   @Input('initValue')
 
   get initVal(){
@@ -30,7 +22,6 @@ export class IntervalInputComponent implements OnInit {
 
   set initVal(i:Interval){
     this._i = i.clone();
-    this.nobreak = i.nobreak;
     this._i.date = this.date;
     this.copy = i.clone();
     this.copy.date=this.date;
@@ -113,11 +104,12 @@ export class IntervalInputComponent implements OnInit {
   delete(){
     this.deleted.emit(true);
   }
+  changeBreakType(){
+    this._i.nobreak = !this._i.nobreak;
+  }
   ngOnInit() {
     this._i.date = this.date;
     this.copy.date = this.date;
-    if(this._i.start.infinity)//changing 'no-break' checkbox should only affect empty 'interval-input's - the non-empty ones will be affected by another mechanism
-      this._i.nobreak =  this.nobreak;
   }
 
 }

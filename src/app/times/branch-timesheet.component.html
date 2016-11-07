@@ -13,11 +13,10 @@
   </md-card-actions>
 <md-card-content>
 <table class="table">
-  <tr><th>Name</th><th>Times</th><th>No Breaks</th></tr>
+  <tr><th>Name</th><th>Times</th></tr>
   <tr *ngIf="vacantEmps.length>0">
     <td><input auto-complete [(ngModel)]="addedEmp" [source]="vacantEmps" #newEmp></td>
-    <td><app-interval-input [date]="_date" [beingEdited]="true" (vChange)="addNew($event)" [nobreak]="addedEmpNoBreaks"></app-interval-input></td>
-    <td><md-checkbox [(ngModel)]="addedEmpNoBreaks"></md-checkbox></td>
+    <td><app-interval-input [date]="_date" [beingEdited]="true" (vChange)="addNew($event)"></app-interval-input></td>
   </tr>
   <tr><td colspan="3"><app-message-fade-out [bgClass]="'warning'" [message]="list.message"></app-message-fade-out></td></tr>
   <tr *ngFor="let k of engagedEmps">
@@ -26,9 +25,8 @@
       <span *ngFor="let wtid of workTimeIDs(k)">
       <app-interval-input [date]="_date" [initValue]="list.items[k].worktimes[wtid]" (vChange)="list.update(k,wtid,$event)" [beingEdited]="list.beingEdited[k][wtid]" (deleted)="list.delete(k,wtid)" [btnName]="'update'"></app-interval-input>
       </span>
-      <div style="width:100%;border-top:1px solid beige"><app-interval-input [beingEdited]="true" [date]="_date" (vChange)="list.add(k,$event)" [nobreak]="list.items[k].nobreak"></app-interval-input></div>
+      <div style="width:100%;border-top:1px solid beige"><app-interval-input [beingEdited]="true" [date]="_date" (vChange)="list.add(k,$event)"></app-interval-input></div>
     </td>
-    <td><md-checkbox [(ngModel)]="list.items[k].nobreak" (change)="changeBreakType(k)"></md-checkbox></td>
   </tr>
 </table>
 </md-card-content>

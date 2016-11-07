@@ -124,11 +124,11 @@ export class Interval{
   toObject(){
     var minuteDiff = moment(this.endDateTime).diff(moment(this.startDateTime),'minutes');
     if(minuteDiff<0)
-      throw('invalid interval: start is ' + (-minuteDiff) + ' after end');
+      throw('invalid interval: start is ' + (-minuteDiff) + ' minutes after end');
     var obj = {
       start:    this.startDateTime,
       end:      this.endDateTime,
-      nobreaks: this.nobreak,
+      nobreak: this.nobreak,
     }
 
     return obj;

@@ -15,7 +15,6 @@ export class BranchTimesheetComponent implements OnInit {
   public lockedAt:string;
   public list:WorktimeList;
   public addedEmp:any = "";
-  public addedEmpNoBreaks = false;
   private _date;
   @ViewChild('newEmp') newEmpElement;
   @Input() bid;
@@ -44,7 +43,7 @@ export class BranchTimesheetComponent implements OnInit {
   addNew(i:Interval){
     if(this.addedEmp.id){
       var newEmp = i.clone();
-      this.list.add(this.addedEmp.id,newEmp,this.addedEmpNoBreaks);
+      this.list.add(this.addedEmp.id,newEmp);
       this.addedEmp="";
       this.newEmpElement.nativeElement.focus();
     }
@@ -56,10 +55,6 @@ export class BranchTimesheetComponent implements OnInit {
 
   getSubtitle(){
     return 'On ' + moment(this.date).format("dddd, MMMM Do YYYY")
-  }
-
-  changeBreakType(eid){
-    this.list.changeBreak(eid);
   }
 
   lock(){

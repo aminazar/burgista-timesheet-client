@@ -69,32 +69,22 @@ export class WorktimeList{
     }
   }
 
-  add(eid,wt:Interval,noBreak = this.items[eid].nobreak){
-    var self = this;
-
-    var addCallback = function(){
+  add(eid,wt:Interval){
       var worktime = wt.clone();
 
-      self.restService.insert('t/' + self.bid + '/' + eid, worktime.toObject())
+      this.restService.insert('t/' + this.bid + '/' + eid, worktime.toObject())
         .subscribe(
           (wtid:any)=>{
-            self.items[eid].nobreak = noBreak;
-            self.items[eid].worktimes[wtid.json()]=worktime;
+            this.items[eid].worktimes[wtid.json()]=worktime;
             wt.start=new TimePair();
             wt.end=new TimePair();
           },
           (err:Response)=>{
-            self.message = err.text();
+            this.message = err.text();
             console.log('error while adding worktime:',err);
           }
         );
-    }
 
-    var formattedDate = moment(this.date).format('YYYY-MM-DD');
-    if(noBreak)
-      this.restService.insert('nobreak',{eid: eid, date:formattedDate, bid: this.bid}).subscribe(()=>{console.log('nobreak added');addCallback()});
-    else
-      this.restService.delete('nobreak/' + formattedDate + '/' + this.bid,eid).subscribe(()=>{console.log('nobreak deleted');addCallback()})
 
   }
 
@@ -114,22 +104,7 @@ export class WorktimeList{
         }
     );
   }
-
-  changeBreak(eid){
-    var formattedDate = moment(this.date).format('YYYY-MM-DD');
-    var self = this;
-    var callback = function(){
-      for(var wtid in self.items[eid].worktimes) {
-        self.items[eid].worktimes[wtid].nobreak=self.items[eid].nobreak;
-        self.update(eid, wtid, self.items[eid].worktimes[wtid]);
-      }
-    }
-
-    if(this.items[eid].nobreak)
-      this.restService.insert('nobreak',{eid: eid, date:formattedDate, bid: this.bid}).subscribe(()=>{console.log('nobreak added');callback();});
-    else
-      this.restService.delete('nobreak/' + formattedDate + '/' + this.bid,eid).subscribe(()=>{console.log('nobreak deleted');callback();})
-  }
+  
 
   delete(eid,wtid){
     this.restService.delete('t', wtid)
