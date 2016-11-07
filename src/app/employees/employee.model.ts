@@ -64,5 +64,6 @@ export class Employee{
         this.isManager = input.role!==undefined?(input.role==='Manager'?true:false):false;
         this.contractDate= input.contract_date!==undefined?moment(input.contract_date).toDate():today;
         this.contractEnd = (input.contract_end && input.contract_end !=='infinity') ? moment(input.contract_end).toDate(): moment('1970-01-01').toDate();
+        this.username    = (input.username)?input.username:'';
     }
 }

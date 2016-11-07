@@ -17,6 +17,8 @@ export class ItemsComponent implements OnInit {
   private copy = {};
   private active = {};
   private pending = {};
+  private resetLink={};
+  private fullname={};
 
   @Input('table') tableName:String;
   @Input('api') apiName:String;
@@ -46,12 +48,21 @@ export class ItemsComponent implements OnInit {
 
   resetPwd(id) {
     if (!this.active[id] && !this.pending[id]) {
-      this.restService.insert('reset/' + id, {email: this.items.find(el=>el[this.idColumn] === id)[this.valueColumn]})
+      var item =  this.items.find(el=>el[this.idColumn] === id);
+      var text = item[this.valueColumn];
+      var email = text;
+      var user = this.fullname[id];
+      this.restService.insert('reset/' + id, {email:email,user:user})
         .subscribe(
           (res:any)=> {
-            this.showMessage('Sent a new invitation to this user.');
-            this.pending[id] = true;
-            this.active[id] = false;
+            if(parseInt(res.json())) {
+              this.showMessage('Sent a new invitation to this user.');
+              this.pending[id] = true;
+              this.active[id] = false;
+            }
+            else{
+              this.resetLink[id]=res.json();
+            }
           },
           (err:Response)=> {
             this.showError('Could not sent a new invitation to this user: ' + err.text());
@@ -136,26 +147,29 @@ export class ItemsComponent implements OnInit {
       values = this.items.find(el=>el[this.idColumn] === id);
       this.restService.update(this.apiName, id, values)
         .subscribe(
-          ()=> {
+          (res)=> {
             this.beingEdited[id] = false;
             this.copy[id] = values[this.valueColumn];
+
+            if(res && res.json()&&!parseInt(res.json())) {
+              this.resetLink[id] = res.json();
+            }
+            else if(res){
+              this.pending[id] = true;
+              this.active[id]=false;
+            }
           },
           (err:any)=> {
-            console.log('Could not update:', err);
+            this.showError('Could not update: ' + err.text());
             this.beingEdited[id] = false;
             this.items.find(el=>el[this.idColumn] === id)[this.valueColumn] = this.copy[id];
           }
         );
     }
-    else if (this.apiName === 'user') {
-      this.beingEdited[id] = false;
-      this.items.find(el=>el[this.idColumn] === id)[this.valueColumn] = this.copy[id];
-    }
   }
 
   letUpdate(id) {
-    if(this.idColumn==='bid')
-      this.beingEdited[id] = true;
+    this.beingEdited[id] = true;
   }
 
   showError(err) {
@@ -183,7 +197,7 @@ export class ItemsComponent implements OnInit {
           res.forEach((item) => {
             var id = item[this.idColumn];
             if(item.firstname){
-              item[this.valueColumn] += ' (' + item.firstname + (item.surname?' ' + item.surname+')':')');
+              this.fullname[id] = item.firstname + (item.surname?' ' + item.surname:'');
             }
             this.beingEdited[id] = false;
             this.copy[id] = item[this.valueColumn];

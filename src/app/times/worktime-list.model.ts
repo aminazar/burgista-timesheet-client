@@ -44,6 +44,7 @@ export class WorktimeList{
       i.endDateTime   = employeeWorktime.end_time;
       i.breakMinutes  = employeeWorktime.breaktime?employeeWorktime.breaktime:0;
       i.nobreak       = Boolean(employeeWorktime.nobreak);
+      i.by            = employeeWorktime.updated_by;
     }
 
     if(this.items[employeeWorktime.eid]){

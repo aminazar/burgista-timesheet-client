@@ -9,13 +9,15 @@ export class Interval{
   private _end:TimePair;
   public date:Date;
   public breakMinutes:number;
-  public _nobreak:boolean;
+  private _nobreak:boolean;
+  public by:string;
 
   constructor(){
     this._start = new TimePair();
     this._end   = new TimePair();
     this.breakMinutes = 0;
     this._nobreak = false;
+    this.by='';
   }
 
   get nextDay(){
@@ -139,6 +141,7 @@ export class Interval{
     c.date = this.date;
     c._nobreak = this._nobreak;
     c.breakMinutes = this.breakMinutes;
+    c.by=this.by;
     var self = this;
     ['_start','_end'].forEach(function(el){
       ['hours','minutes','nextDay','infinity'].forEach(function(prop){

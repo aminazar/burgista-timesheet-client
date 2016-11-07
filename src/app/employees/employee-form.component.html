@@ -14,7 +14,8 @@
   <md-input placeholder="Rate" align="end" [(ngModel)]="value.rate" style="width:55px" (change)="onChange()">
     <span md-prefix>£</span>
   </md-input>
-  <md-checkbox [(ngModel)]="value.isManager" (change)="onChange()">Manager</md-checkbox>
+  <md-checkbox *ngIf="isNew" [(ngModel)]="value.isManager" (change)="onChange()">Manager</md-checkbox>
+  <span *ngIf="!isNew&&value.isManager" class="manager">MANAGER: {{value.username}}</span>
   <div *ngIf="value.isManager&&isNew">†
     <md-input placeholder="Username" [(ngModel)]="value.username" #username (change)="onChange()"></md-input>
     <md-input type="Password"  placeholder="Password" [(ngModel)]="value.password" #password (change)="onChange()"></md-input>

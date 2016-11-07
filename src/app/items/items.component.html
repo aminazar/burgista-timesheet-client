@@ -3,7 +3,7 @@
 <app-message-fade-out [bgClass]="'warning'" [(message)]="errMessage"></app-message-fade-out>
 <ul class="list-group">
   <li class="list-group-item" *ngFor="let item of items" [class.inactive]="!active[item[idColumn]]">
-    <input *ngIf="idColumn==='bid'" [ngClass]="[beingEdited[item[idColumn]]?'':'hidden']" [(ngModel)]="item[valueColumn]" (blur)="update(item[idColumn],13)" (keydown)="update(item[idColumn],$event.keyCode)"> <span [ngClass]="[beingEdited[item[idColumn]]?'hidden':'']" (click)="letUpdate(item[idColumn])">{{item[valueColumn]}}</span><span *ngIf="!active[item[idColumn]]" (click)="resetPwd(item[idColumn])" class="inactive">{{pending[item[idColumn]]?'pending':'inactive'}}</span><span (click)="remove(item[idColumn])"><i class=" fa fa-times fa-fw" style='color: red' aria-hidden="true"></i></span>
+    <span *ngIf="fullname[item[idColumn]]">{{fullname[item[idColumn]]}}:</span><input [ngClass]="[beingEdited[item[idColumn]]?'':'hidden']" [(ngModel)]="item[valueColumn]" (blur)="update(item[idColumn],13)" (keydown)="update(item[idColumn],$event.keyCode)"> <span [ngClass]="[beingEdited[item[idColumn]]?'hidden':'']" (click)="letUpdate(item[idColumn])">{{item[valueColumn]}}</span><span *ngIf="!active[item[idColumn]]" (click)="resetPwd(item[idColumn])" class="inactive">{{pending[item[idColumn]]?'pending':'inactive'}}</span><span *ngIf="resetLink[item[idColumn]]"><a [href]="resetLink[item[idColumn]]" target="_blank">reset password</a></span><span (click)="remove(item[idColumn])"><i class=" fa fa-times fa-fw" style='color: red' aria-hidden="true"></i></span>
   </li>
 </ul>
 <div *ngIf="idColumn==='bid'" class="input-group">

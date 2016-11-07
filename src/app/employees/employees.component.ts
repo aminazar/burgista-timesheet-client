@@ -72,7 +72,8 @@ export class EmployeesComponent implements OnInit {
                   newItemO.eid = eid;
                   this.updateEnabled[eid]=false;
                   this.deleteEnabled[eid]=true;
-                  this.items.push(newItemO);
+                  var ind = this.items.findIndex((el)=>el.toString() > newItemO.toString() || el.isExpired());
+                  this.items.splice(ind,0,newItemO);
               },
               (err:Response)=>{
                   this.showError(err.text());
