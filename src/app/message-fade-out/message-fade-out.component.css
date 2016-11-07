@@ -1,7 +1,20 @@
-p{
+p.warning{
+    border:2px solid transparent;
     position:fixed;
     top:52px;
     left:0px;
-    text-align: center;
     z-index: 100;
+    font-size: 18px;
+    padding:3px;
+    border-radius: 5px;
+}
+p.info{
+    border:0px solid transparent;
+    position:fixed;
+    bottom:0px;
+    left:0px;
+    z-index: 100;
+    font-size: 18px;
+    padding:3px;
+    border-radius: 5px;
 }

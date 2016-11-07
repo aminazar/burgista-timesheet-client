@@ -9,8 +9,10 @@ export class MessageFadeOutComponent{
   private opacity=0;
   private transition="";
   private height = '0px';
+  private borderColor:any = null;
   private _message="";
   private _bgClass="";
+  private timeout;
 
   constructor() { }
 
@@ -24,19 +26,30 @@ export class MessageFadeOutComponent{
 
   @Input()
   set message(msg){
-    this._message=msg;
+    this._message = msg;
+
     this.opacity = 1;
     this.height='auto';
-    this.transition = 'opacity '+ (msg.length/500).toString() +'s ease-out, ' +
-                      'height ' + (msg.length/500).toString() +'s ease-out';
+    this.transition = 'border-color ' + .3 +'s ease-out';
+    var i = 1;
+    var flashBorder = setInterval(()=> {
+      this.borderColor = (i % 2) ? null : 'darkred';
+      i++;
+    },400);
 
     setTimeout(()=>{
-      this.opacity=0;
-      this.height='0px';
-      this.transition='opacity ' + (msg.length/500).toString() +'s ease-out, ' +
-                      'height ' + (msg.length/500).toString() +'s ease-out, ';
+      clearInterval(flashBorder);
+    },5000);
 
-    },msg.length * 30 );
+    if(this.timeout)
+      clearTimeout(this.timeout);
+
+    this.timeout = setTimeout(()=>{
+
+      this.transition='opacity ' + (msg.length*.05).toString() +'s ease-out';
+
+      this.opacity=0;
+      },msg.length * 250 );
   }
   get message(){
     return this._message;

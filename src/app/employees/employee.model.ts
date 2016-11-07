@@ -41,10 +41,11 @@ export class Employee{
             role:           this.isManager?'Manager':'Employee',
             contract_date:  moment.utc(this.contractDate).format('YYYY-MM-DD'),
             contract_end:   this.isExpired() ? moment(this.contractEnd).toDate() : 'infinity',
-            username:       this.username,
-            password:       this.password,
         };
-
+        if(this.isManager){
+            obj.username= this.username;
+            obj.password= this.password;
+        }
 
         return obj;
     }
@@ -63,7 +64,5 @@ export class Employee{
         this.isManager = input.role!==undefined?(input.role==='Manager'?true:false):false;
         this.contractDate= input.contract_date!==undefined?moment(input.contract_date).toDate():today;
         this.contractEnd = (input.contract_end && input.contract_end !=='infinity') ? moment(input.contract_end).toDate(): moment('1970-01-01').toDate();
-        this.username   = (input.role==='Manager')?input.username:'';
-        this.password   = (input.role==='Manager')?input.password:'';
     }
 }
