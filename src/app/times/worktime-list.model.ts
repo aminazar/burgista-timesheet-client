@@ -76,6 +76,7 @@ export class WorktimeList{
       this.restService.insert('t/' + this.bid + '/' + eid, worktime.toObject())
         .subscribe(
           (wtid:any)=>{
+            worktime.by='You';
             this.items[eid].worktimes[wtid.json()]=worktime;
             wt.start=new TimePair();
             wt.end=new TimePair();
@@ -94,6 +95,7 @@ export class WorktimeList{
       .subscribe(
         ()=>{
           console.log('worktime ' + wtid + 'updated');
+          i.by='You';
           this.copy[wtid]=i;
           this.items[eid].worktimes[wtid] = i;
         },
