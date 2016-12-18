@@ -39,8 +39,10 @@ export class EmployeeFormComponent implements OnInit {
   }
 
   action(){
-    if(this.isNew)
+    if(this.isNew) {
       this.add.emit(this.value);
+      this.value = new Employee({});
+    }
     else
       this.update.emit(this.value);
   }

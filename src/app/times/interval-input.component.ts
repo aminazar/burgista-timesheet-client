@@ -85,10 +85,13 @@ export class IntervalInputComponent implements OnInit {
   add(){
     this._i.date = this.date;
     this.copy.date = this.date;
-    if(this.btnName==='update')
-      this.beingEdited=false;
 
     this.vChange.emit(this._i.clone());
+
+    if(this.btnName==='update')
+      this.beingEdited=false;
+    else
+      this._i = new Interval();
   }
 
   editStart(){

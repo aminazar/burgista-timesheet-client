@@ -1,3 +1,6 @@
 md-card.md-card{
     min-height:600px;
 }
+input.name-picker{
+    width:400px;
+}

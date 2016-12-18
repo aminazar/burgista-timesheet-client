@@ -5,17 +5,11 @@
     {{getSubtitle()}}
   </md-card-subtitle>
   </md-card-title-group>
-  <md-card-actions>
-    <button md-raised-button [disabled]="isLocked" color='primary' (click)="lock()">
-      <md-icon fontSet="fa" [fontIcon]="isLocked?'fa-lock':'fa-unlock-alt'"></md-icon>
-      {{isLocked?'Locked by: ' + lockedBy + ' at ' + lockedAt : 'Lock this branch'}}
-    </button>
-  </md-card-actions>
 <md-card-content>
 <table class="table">
   <tr><th>Name</th><th>Times</th></tr>
   <tr *ngIf="vacantEmps.length>0">
-    <td><input auto-complete [(ngModel)]="addedEmp" [source]="vacantEmps" #newEmp></td>
+    <td><input auto-complete [ngClass]="['name-picker']" [(ngModel)]="addedEmp" [source]="vacantEmps" #newEmp></td>
     <td><app-interval-input [date]="_date" [beingEdited]="true" (vChange)="addNew($event)"></app-interval-input></td>
   </tr>
   <tr><td colspan="3"><app-message-fade-out [bgClass]="'warning'" [message]="list.message"></app-message-fade-out></td></tr>

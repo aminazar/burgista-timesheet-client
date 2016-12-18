@@ -73,7 +73,7 @@ export class Interval{
     if(!this._start.infinity && !this._end.infinity && !this.nobreak) {
       var d = moment(this.endDateTime).diff(moment(this.startDateTime), 'hours', true);
 
-      this.breakMinutes = (d>6)?30:(d>4)?20:0;
+      this.breakMinutes = (d>7)?40:(d>3)?20:0;
     }
     else{
       this.breakMinutes = 0;
