@@ -30,6 +30,8 @@ import { DatepickerComponent } from './angular2-material-datepicker/datepicker.c
 import { BranchTimesheetComponent } from './times/branch-timesheet.component';
 import { IntervalInputComponent } from './times/interval-input.component';
 import { Ng2AutoCompleteModule } from 'ng2-auto-complete';
+import { ModalModule } from 'angular2-modal';
+import { BootstrapModalModule } from 'angular2-modal/plugins/bootstrap';
 
 @NgModule({
     declarations:   [AppComponent, LoginComponent, NavbarComponent, LeftbarComponent, RightbarComponent, FooterComponent, MainComponent, HomeComponent, BranchesComponent, UsersComponent, MessageFadeOutComponent, ItemsComponent, EmployeesComponent, TimesComponent, ReportComponent, EmployeeFormComponent, EmployeeFormComponent, DatepickerComponent, BranchTimesheetComponent, IntervalInputComponent],
@@ -41,6 +43,8 @@ import { Ng2AutoCompleteModule } from 'ng2-auto-complete';
         MaterialModule.forRoot(),
         HttpModule,
         Ng2AutoCompleteModule,
+        ModalModule.forRoot(),
+        BootstrapModalModule,
     ],
     providers:      [LoginService,RestService,LoggedInGuard],
     bootstrap:      [AppComponent]

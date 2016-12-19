@@ -23,9 +23,12 @@ To
             <div class="panel-heading">Employees timesheet report</div>
 
             <!-- Table -->
-            <table class="table">
-              <th>Firstname</th><th>Surname</th><th>Rate</th><th>Hours</th><th>Mins</th><th>Breaks</th><th>Sum</th><th>Paid</th><th>Remainder</th>
-              <tr *ngFor="let row of table">
+            <table *ngIf="!isFiltered" class="table">
+              <tr class="darkbg">
+                <th>&nbsp;</th><th>Firstname</th><th>Surname</th><th>Rate</th><th>Hours</th><th>Mins</th><th>Breaks</th><th>Sum</th><th>Paid</th><th>Remainder</th>
+              </tr>
+              <tr *ngFor="let row of table;let i = index;" [class.darkbg]="i%2">
+                <td><button (click)="filter(row.eid,row.firstname + ' ' + row.surname)"><i class="fa fa-filter" aria-hidden="true"></i></button></td>
                 <td>{{row.firstname}}</td>
                 <td>{{row.surname}}</td>
                 <td>{{row.rate.substr(1)}}</td>
@@ -35,6 +38,22 @@ To
                 <td>{{calc[row.eid].toFixed(2)}}</td>
                 <td><input style="width:65px" [(ngModel)]="paid[row.eid]"/></td>
                 <td>{{(calc[row.eid]-paid[row.eid]).toFixed(2)}}</td>
+              </tr>
+            </table>
+            <div *ngIf="isFiltered" style="font-size:125%"><button (click)="unfilter()"><i class="fa fa-filter" aria-hidden="true"></i></button> {{filteredName}}</div>
+            <table *ngIf="isFiltered" class="table">
+              <tr class="darkbg">
+                <th>Date</th><th *ngIf="branch.name==='All'">Branch</th><th>Start</th><th>End</th><th>Hours</th><th>Minutes</th><th>Break minutes</th><th>No Break</th>
+              </tr>
+              <tr *ngFor="let row of fTable;let i = index;" [class.darkbg]="i%2">
+                <td>{{row.sdate}}</td>
+                <td *ngIf="branch.name==='All'">{{row.branch}}</td>
+                <td>{{row.start_time}}</td>
+                <td>{{row.end_time}}</td>
+                <td>{{row.hours}}</td>
+                <td>{{row.mins}}</td>
+                <td>{{row.breaktime}}</td>
+                <td>{{row.nobreak}}</td>
               </tr>
             </table>
           </div>
