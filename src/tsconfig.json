@@ -12,6 +12,12 @@
     "target": "es5",
     "typeRoots": [
       "../node_modules/@types"
-    ]
-  }
+    ],
+    "moduleResolution": "node"
+  },
+  "exclude": [
+    "node_modules",
+    "typings/main.d.ts",
+    "typings/main"
+  ]
 }
