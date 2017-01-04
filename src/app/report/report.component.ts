@@ -120,8 +120,10 @@ export class ReportComponent implements OnInit {
             ['minsSum','breaksSumMinutes','holidaySumMinutes','payingTimeSumMinutes'].forEach(t =>{if(this[t]<10)this[t]='0'+this[t]});
           },
           (err)=>console.log(err));
-      if(this.isFiltered)
+      if(this.isFiltered) {
+        this.fTable = [];
         this.getFilteredTable();
+      }
     }
   }
 
@@ -149,8 +151,7 @@ export class ReportComponent implements OnInit {
           this.fPayingTimeSumHours = 0;
           this.fPayingTimeSumMinutes = 0;
           for(var i in this.fTable){
-            let row = this.table.find(r=>r.eid===this.filteredEid);
-            this.fTable[i].wage = Math.round( 100 * parseFloat(row.rate.substr(1)) * (this.fTable[i].hours + (this.fTable[i].mins-parseInt(this.fTable[i].breaktime)) / 60 ) ) / 100;
+            this.fTable[i].wage = Math.round( 100 * parseFloat(this.fTable[i].rate.substr(1)) * (this.fTable[i].hours + (this.fTable[i].mins-parseInt(this.fTable[i].breaktime)) / 60 ) ) / 100;
             this.fTable[i].start_time = this.fTable[i].start_time.substr(0,5);
             this.fTable[i].end_time = this.fTable[i].end_time.substr(0,5);
             this.fTable[i].rate = this.fTable[i].rate.substr(1);
