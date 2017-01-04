@@ -25,53 +25,55 @@ To
             <!-- Table -->
             <table *ngIf="!isFiltered" class="table">
               <tr class="darkbg">
-                <th>&nbsp;</th><th>Firstname</th><th>Surname</th><th>Rate</th><th>Hours</th><th>Mins</th><th>Breaks</th><th>Sum</th><th>Paid</th><th>Remainder</th>
+                <th>&nbsp;</th><th>Firstname</th><th>Surname</th><th>Rate</th><th>Worked</th><th>Breaks</th><th>Paying Time</th><th>Holiday Entitlement</th><th>Wage</th><th>Paid</th><th>Remainder</th>
               </tr>
               <tr *ngFor="let row of table;let i = index;" [class.darkbg]="i%2">
                 <td><button (click)="filter(row.eid,row.firstname + ' ' + row.surname)"><i class="fa fa-filter" aria-hidden="true"></i></button></td>
                 <td>{{row.firstname}}</td>
                 <td>{{row.surname}}</td>
-                <td>{{row.rate.substr(1)}}</td>
-                <td>{{row.hours}}</td>
-                <td>{{row.mins}}</td>
-                <td>{{row.breaks}}</td>
-                <td>{{calc[row.eid].toFixed(2)}}</td>
-                <td><input style="width:65px" [(ngModel)]="paid[row.eid]" (keyup)="recalcPaid()"/></td>
-                <td>{{(calc[row.eid]-paid[row.eid]).toFixed(2)}}</td>
+                <td>£{{row.rate.substr(1)}}</td>
+                <td>{{row.hours}}:{{row.mins}}</td>
+                <td>{{row.breaks_hours}}:{{row.breaks_mins}}</td>
+                <td>{{row.paying_time_hours}}:{{row.paying_time_mins}}</td>
+                <td>{{row.holiday_hours}}:{{row.holiday_mins}}</td>
+                <td>£{{calc[row.eid].toFixed(2)}}</td>
+                <td>£<input style="width:65px" [(ngModel)]="paid[row.eid]" (keyup)="recalcPaid()"/></td>
+                <td>£{{(calc[row.eid]-(paid[row.eid]?paid[row.eid]:0)).toFixed(2)}}</td>
               </tr>
               <tr class="sumrow">
                 <td colspan="4" style="text-align:right">Sum</td>
-                <td>{{hoursSum}}</td>
-                <td>{{minsSum}}</td>
-                <td>{{breaksSum}}</td>
-                <td>{{sumSum}}</td>
-                <td>{{paidSum}}</td>
-                <td>{{remainderSum}}</td>
+                <td>{{hoursSum}}:{{minsSum}}</td>
+                <td>{{breaksSumHours}}:{{breaksSumMinutes}}</td>
+                <td>{{payingTimeSumHours}}:{{payingTimeSumMinutes}}</td>
+                <td>{{holdiaySumHours}}:{{holidaySumMinutes}}</td>
+                <td>£{{sumSum}}</td>
+                <td>£{{paidSum}}</td>
+                <td>£{{remainderSum}}</td>
               </tr>
             </table>
             <div *ngIf="isFiltered" style="font-size:125%"><button (click)="unfilter()"><i class="fa fa-filter" aria-hidden="true"></i></button> {{filteredName}}</div>
             <table *ngIf="isFiltered" class="table">
               <tr class="darkbg">
-                <th>Date</th><th *ngIf="branch.name==='All'">Branch</th><th>Start</th><th>End</th><th>No Break</th><th>Hours</th><th>Minutes</th><th>Break minutes</th><th>Wage</th>
+                <th>Date</th><th *ngIf="branch.name==='All'">Branch</th><th>Start</th><th>End</th><th>Rate</th><th>Worked</th><th>Break</th><th>Paying Time</th><th>Wage</th>
               </tr>
               <tr *ngFor="let row of fTable;let i = index;" [class.darkbg]="i%2">
                 <td>{{row.sdate}}</td>
                 <td *ngIf="branch.name==='All'">{{row.branch}}</td>
                 <td>{{row.start_time}}</td>
                 <td>{{row.end_time}}</td>
-                <td>{{row.nobreak}}</td>
-                <td>{{row.hours}}</td>
-                <td>{{row.mins}}</td>
+                <td>£{{row.rate}}</td>
+                <td>{{row.hours}}:{{row.mins}}</td>
                 <td>{{row.breaktime}}</td>
-                <td>{{row.wage}}</td>
+                <td>{{row.paying_time_hours}}:{{row.paying_time_mins}}</td>
+                <td>£{{row.wage.toFixed(2)}}</td>
               </tr>
               <tr  class="sumrow">
                 <td *ngIf="branch.name==='All'" colspan="5" style="text-align:right">Sum</td>
                 <td *ngIf="branch.name!=='All'" colspan="4" style="text-align:right">Sum</td>
-                <td>{{fHoursSum}}</td>
-                <td>{{fMinsSum}}</td>
-                <td>{{fBreaktimeSum}}</td>
-                <td>{{wageSum}}</td>
+                <td>{{fHoursSum}}:{{fMinsSum}}</td>
+                <td>{{fBreaktimeSumHours}}:{{fBreaktimeSumMinutes}}</td>
+                <td>{{fPayingTimeSumHours}}:{{fPayingTimeSumMinutes}}</td>
+                <td>£{{wageSum}}</td>
               </tr>
             </table>
           </div>
