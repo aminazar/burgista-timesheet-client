@@ -7,6 +7,7 @@ export class Employee{
     public eid:number;
     public firstname:string;
     public surname:string;
+    public email:string;
     public rate:string;
     public isManager:boolean;
     public contractDate:Date;
@@ -37,6 +38,7 @@ export class Employee{
         obj = {
             firstname:      this.firstname,
             surname:        this.surname,
+            email:          this.email,
             rate:           this.rate,
             role:           this.isManager?'Manager':'Employee',
             contract_date:  moment.utc(this.contractDate).format('YYYY-MM-DD'),
@@ -51,7 +53,8 @@ export class Employee{
     }
 
     isExpired(){
-        return this.contractEnd.getFullYear()!==1970;
+        let d = new Date();
+        return this.contractEnd < d;
     }
 
     constructor(input:any){
@@ -60,6 +63,7 @@ export class Employee{
         this.eid       = input.eid!==undefined?input.eid:NaN;
         this.firstname = check(input.firstname);
         this.surname   = check(input.surname);
+        this.email     = check(input.email);
         this.rate      = input.rate!==undefined?input.rate.substr(1):'';
         this.isManager = input.role!==undefined?(input.role==='Manager'?true:false):false;
         this.contractDate= input.contract_date!==undefined?moment(input.contract_date).toDate():today;

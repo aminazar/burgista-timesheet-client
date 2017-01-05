@@ -38,8 +38,7 @@ export class ReportComponent implements OnInit {
   private paidSum=0;
   private remainderSum=0;
 
-  constructor(private restService:RestService, overlay: Overlay, vcRef: ViewContainerRef, public modal: Modal) {
-    overlay.defaultViewContainer = vcRef;
+  constructor(private restService:RestService) {
   }
 
   onEndSelect(d){
@@ -89,7 +88,20 @@ export class ReportComponent implements OnInit {
     this.getFilteredTable();
   }
 
-  private getFilteredTable() {
+  emailReport(eid,filteredName){
+    this.filteredName = filteredName;
+    this.filteredEid = eid;
+    this.getFilteredTable(()=>{
+      let data = this.getFilteredData();
+      this.restService.update('report/'+moment(this.startDate).format('YYYY-MM-DD')+'/'+moment(this.endDate).format('YYYY-MM-DD'),eid,data)
+          .subscribe(
+              ()=>{},
+              (err)=>{}
+          )
+    })
+  }
+
+  private getFilteredTable(callback:any=null) {
     this.restService.getWithParams('report/' + this.curBranch + '/' + this.filteredEid, {
       start: moment(this.startDate).format('YYYY-MM-DD'),
       end: moment(this.endDate).format('YYYY-MM-DD')
@@ -116,6 +128,9 @@ export class ReportComponent implements OnInit {
             this.wageSum += this.fTable[i].wage;
           }
           this.wageSum = this.wageSum.toFixed(2);
+          if(typeof callback==='function'){
+            callback();
+          }
         },
         (err)=>console.log(err));
   }
@@ -134,62 +149,10 @@ export class ReportComponent implements OnInit {
   let paid = this.paid;
   let calc = this.calc;
   if(this.isFiltered) {
-    this.fTable.forEach((currentVal, index)=> {
-      data.push({
-        "#": index + 1,
-        "Date": currentVal.sdate,
-        "Branch": this.curBranch==='ALL'?currentVal.branch:'',
-        "Start Time": currentVal.start_time,
-        "End Time": currentVal.end_time,
-        "No Break Was Active": currentVal.nobreak,
-        "Hours Worked": currentVal.hours,
-        "Minutes Worked": currentVal.mins,
-        "Minutes Took Break": currentVal.breaktime,
-        "Wage":'£' +currentVal.wage,
-      })
-    });
-    data.push({
-      '#':'Sum',
-      'Date':'',
-      'Branch':'',
-      'Start Time':'',
-      'End Time':'',
-      'No Break Was Active':'',
-      'Hours Worked': this.fHoursSum,
-      'Minutes Worked': this.fMinsSum,
-      'Minutes Took Break': this.fBreaktimeSum,
-      'Wage':'£' + this.wageSum,
-    })
+    data = this.getFilteredData();
   }
   else {
-    this.table.forEach(function (currentVal, index) {
-      data.push({
-        "#": index + 1,
-        "ID": currentVal.eid,
-        "First Name": currentVal.firstname,
-        "Surname": currentVal.surname,
-        "Hourly Rate": '£' +currentVal.rate.substr(1),
-        "Hours Worked": currentVal.hours,
-        "Minutes Worked": currentVal.mins,
-        "Minutes Took Break": currentVal.breaks,
-        "Wage Sum": '£' + calc[currentVal.eid].toFixed(2),
-        "Wage Paid": '£' + parseFloat(paid[currentVal.eid]).toFixed(2),
-        "Wage Remainder": '£' + (calc[currentVal.eid] - paid[currentVal.eid]).toFixed(2)
-      });
-    });
-    data.push({
-      "#": 'Sum',
-      "ID": '',
-      "First Name": '',
-      "Surname": '',
-      "Hourly Rate": '',
-      "Hours Worked": this.hoursSum,
-      "Minutes Worked": this.minsSum,
-      "Minutes Took Break": this.breaksSum,
-      "Wage Sum": '£' + this.sumSum,
-      "Wage Paid": '£' + this.paidSum,
-      "Wage Remainder": '£' + this.remainderSum,
-    })
+    data = this.getData();
   }
   columnDelimiter =  ',';
   lineDelimiter =  '\n';
@@ -213,6 +176,70 @@ export class ReportComponent implements OnInit {
 
   return result;
 }
+
+  private getData(){
+    let data = [];
+      this.table.forEach(function (currentVal, index) {
+        data.push({
+          "#": index + 1,
+          "ID": currentVal.eid,
+          "First Name": currentVal.firstname,
+          "Surname": currentVal.surname,
+          "Hourly Rate": '£' +currentVal.rate.substr(1),
+          "Hours Worked": currentVal.hours,
+          "Minutes Worked": currentVal.mins,
+          "Minutes Took Break": currentVal.breaks,
+          "Wage Sum": '£' + this.calc[currentVal.eid].toFixed(2),
+          "Wage Paid": '£' + parseFloat(this.paid[currentVal.eid]).toFixed(2),
+          "Wage Remainder": '£' + (this.calc[currentVal.eid] - this.paid[currentVal.eid]).toFixed(2)
+        });
+      });
+      data.push({
+        "#": 'Sum',
+        "ID": '',
+        "First Name": '',
+        "Surname": '',
+        "Hourly Rate": '',
+        "Hours Worked": this.hoursSum,
+        "Minutes Worked": this.minsSum,
+        "Minutes Took Break": this.breaksSum,
+              "Wage Sum": '£' + this.sumSum,
+              "Wage Paid": '£' + this.paidSum,
+              "Wage Remainder": '£' + this.remainderSum,
+          })
+    return data;
+  }
+
+  private getFilteredData(){
+      let data=[];
+      this.fTable.forEach((currentVal, index)=> {
+        data.push({
+          "#": index + 1,
+          "Date": currentVal.sdate,
+          "Branch": this.curBranch==='ALL'?currentVal.branch:'',
+          "Start Time": currentVal.start_time,
+          "End Time": currentVal.end_time,
+          "No Break Was Active": currentVal.nobreak,
+          "Hours Worked": currentVal.hours,
+          "Minutes Worked": currentVal.mins,
+          "Minutes Took Break": currentVal.breaktime,
+          "Wage":'£' +currentVal.wage,
+        })
+      });
+      data.push({
+        '#':'Sum',
+        'Date':'',
+        'Branch':'',
+        'Start Time':'',
+        'End Time':'',
+        'No Break Was Active':'',
+        'Hours Worked': this.fHoursSum,
+              'Minutes Worked': this.fMinsSum,
+              'Minutes Took Break': this.fBreaktimeSum,
+              'Wage':'£' + this.wageSum,
+          });
+    return data;
+  }
 
   downloadCSV(args) {
   var filename;
