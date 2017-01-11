@@ -46,8 +46,7 @@ export class ReportComponent implements OnInit {
   private paidSum:any=0;
   private remainderSum:any=0;
 
-  constructor(private restService:RestService, overlay: Overlay, vcRef: ViewContainerRef, public modal: Modal) {
-    overlay.defaultViewContainer = vcRef;
+  constructor(private restService:RestService) {
   }
 
   onEndSelect(d){
@@ -134,7 +133,20 @@ export class ReportComponent implements OnInit {
     this.getFilteredTable();
   }
 
-  private getFilteredTable() {
+  emailReport(eid,filteredName){
+    this.filteredName = filteredName;
+    this.filteredEid = eid;
+    this.getFilteredTable(()=>{
+      let data = this.getFilteredData();
+      this.restService.update('report/'+moment(this.startDate).format('YYYY-MM-DD')+'/'+moment(this.endDate).format('YYYY-MM-DD'),eid,data)
+          .subscribe(
+              ()=>{},
+              (err)=>{}
+          )
+    })
+  }
+
+  private getFilteredTable(callback:any=null) {
     this.restService.getWithParams('report/' + this.curBranch + '/' + this.filteredEid, {
       start: moment(this.startDate).format('YYYY-MM-DD'),
       end: moment(this.endDate).format('YYYY-MM-DD')
@@ -183,6 +195,9 @@ export class ReportComponent implements OnInit {
           }
           ['fMinsSum','fBreaktimeSumMinutes','fPayingTimeSumMinutes'].forEach(t =>{if(this[t]<10)this[t]='0'+this[t]});
           this.wageSum = this.wageSum.toFixed(2);
+          if(typeof callback==='function'){
+            callback();
+          }
         },
         (err)=>console.log(err));
   }
