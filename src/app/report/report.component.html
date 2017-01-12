@@ -1,3 +1,5 @@
+<app-message-fade-out [bgClass]="'info'" [(message)]="message"></app-message-fade-out>
+<app-message-fade-out [bgClass]="'warning'" [(message)]="errMessage"></app-message-fade-out>
 From
 <div class="rtpDatePicker">
   <material-datepicker class="date-input" [date]="startDate" (onSelect)="onStartSelect($event)"></material-datepicker>
@@ -6,7 +8,7 @@ To
 <div class="rtpDatePicker">
   <material-datepicker class="date-input" [date]="endDate" (onSelect)="onEndSelect($event)"></material-datepicker>
 </div>
-<md-tab-group (selectChange)="changeBranch($event)">>
+<md-tab-group (selectChange)="changeBranch($event)">
   <md-tab *ngFor="let branch of branches">
     <template md-tab-label>{{branch.name}}</template>
     <template md-tab-content>
@@ -17,15 +19,15 @@ To
           <div class="panel panel-default">
             <!-- Default panel contents -->
             <button type="button" class="btn btn-default btn-lg" (click)="downloadCSV()">
-              <span class="glyphicon download-alt" aria-hidden="true"></span> Download
+              <i class="fa fa-download" aria-hidden="true"></i> Download
             </button>
-
-            <div class="panel-heading">Employees timesheet report</div>
-
+            <button *ngIf="isFiltered && filteredHasEmail && curBranch==='ALL'" type="button" class="btn btn-default btn-lg" (click)="emailReport(filteredEid,filteredName)" [disabled]="!emailEnabled[filteredEid]||emailSent[filteredEid]">
+              <i class="fa fa-envelope" aria-hidden="true"></i> Email report
+            </button>
             <!-- Table -->
             <table *ngIf="!isFiltered" class="table">
               <tr class="darkbg">
-                <th>&nbsp;</th><th>Firstname</th><th>Surname</th><th>Rate</th><th>Worked</th><th>Breaks</th><th>Paying Time</th><th>Holiday Entitlement</th><th>Wage</th><th>Paid</th><th>Remainder</th>
+                <th>&nbsp;</th><th>Firstname</th><th>Surname</th><th>Rate</th><th>Worked</th><th>Breaks</th><th>Paying Time</th><th>Holiday Entitlement</th><th>Wage</th><th>Paid</th><th>Remainder</th><th>&nbsp;</th>
               </tr>
               <tr *ngFor="let row of table;let i = index;" [class.darkbg]="i%2">
                 <td><button (click)="filter(row.eid,row.firstname + ' ' + row.surname)"><i class="fa fa-filter" aria-hidden="true"></i></button></td>
@@ -39,6 +41,7 @@ To
                 <td>£{{calc[row.eid].toFixed(2)}}</td>
                 <td>£<input style="width:65px" [(ngModel)]="paid[row.eid]" (keyup)="recalcPaid()"/></td>
                 <td>£{{(calc[row.eid]-(paid[row.eid]?paid[row.eid]:0)).toFixed(2)}}</td>
+                <td><button *ngIf="row.email && curBranch==='ALL'" (click)="emailReport(row.eid, row.firstname + ' ' + row.surname)" [disabled]="!this.emailEnabled[row.eid]||this.emailSent[row.eid]" [class.sentEmail]="this.emailSent[row.eid]"><i class="fa fa-envelope" aria-hidden="true"></i></button></td>
               </tr>
               <tr class="sumrow">
                 <td colspan="4" style="text-align:right">Sum</td>
@@ -49,6 +52,7 @@ To
                 <td>£{{sumSum}}</td>
                 <td>£{{paidSum}}</td>
                 <td>£{{remainderSum}}</td>
+                <td>&nbsp;</td>
               </tr>
             </table>
             <div *ngIf="isFiltered" style="font-size:125%"><button (click)="unfilter()"><i class="fa fa-filter" aria-hidden="true"></i></button> {{filteredName}}</div>

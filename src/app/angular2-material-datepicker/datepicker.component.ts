@@ -2,7 +2,7 @@ import { animate, Component, EventEmitter, Input, keyframes, OnChanges, OnInit,
          Output, SimpleChange, state, style, transition, trigger } from '@angular/core';
 
 import { Calendar } from './calendar';
-import * as moment from 'moment'
+import { INF_DATE } from '../constants';
 
 @Component({
   selector: 'material-datepicker',
@@ -433,7 +433,7 @@ export class DatepickerComponent implements OnInit, OnChanges {
   }
 
   onLeaveEmpty(){
-    this.onSelect.emit(moment('1970-01-01').toDate());
+    this.onSelect.emit(INF_DATE);
     this.showCalendar=false;
   }
 

@@ -11,9 +11,9 @@
       {{surname.characterCount}} / {{nameLength}}
     </md-hint>
   </md-input>
-  <md-input placeholder="Email" maxlength="100" [(ngModel)]="value.email" (change)="onChange()">
+  <md-input placeholder="Email" maxlength="100" [(ngModel)]="value.email" #email (change)="onChange()">
     <md-hint align="end">
-      {{surname.characterCount}} / 100
+      {{email.characterCount}} / 100
     </md-hint>
   </md-input>
   <md-input placeholder="Rate" align="end" [(ngModel)]="value.rate" style="width:55px" (change)="onChange()">

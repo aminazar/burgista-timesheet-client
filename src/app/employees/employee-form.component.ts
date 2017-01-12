@@ -68,7 +68,8 @@ export class EmployeeFormComponent implements OnInit {
   }
 
   calcSubtitle() {
-    this.subtitle = this.isExpired ? 'Expired Contract' : 'Started ' + moment(this.value.contractDate).fromNow();
+    this.subtitle = this.value.eid ? this.isExpired ? 'Expired Contract' : 'Started ' + moment(this.value.contractDate).fromNow() : '';
+    this.subtitle += this.value.eid ? ` - EID: ${this.value.eid}` : `Not in database yet`;
   }
   onStartDateSelect(date){
     this.value.contractDate=date;

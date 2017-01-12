@@ -2,6 +2,7 @@
  * Created by Amin on 04/10/2016.
  */
 import * as moment from 'moment';
+import { INF_DATE } from '../constants';
 
 export class Employee{
     public eid:number;
@@ -21,7 +22,8 @@ export class Employee{
                 this.contractDate === other.contractDate &&
                 this.contractEnd === other.contractEnd &&
                 this.password   === other.password &&
-                this.username   === other.username
+                this.username   === other.username &&
+                this.email      === other.email
     }
 
     sameName(other:Employee){
@@ -42,7 +44,7 @@ export class Employee{
             rate:           this.rate,
             role:           this.isManager?'Manager':'Employee',
             contract_date:  moment.utc(this.contractDate).format('YYYY-MM-DD'),
-            contract_end:   this.isExpired() ? moment(this.contractEnd).toDate() : 'infinity',
+            contract_end:   this.contractEnd !== INF_DATE ? moment(this.contractEnd).format('YYYY-MM-DD') : 'infinity',
         };
         if(this.isManager){
             obj.username= this.username;
@@ -54,7 +56,7 @@ export class Employee{
 
     isExpired(){
         let d = new Date();
-        return this.contractEnd < d;
+        return this.contractEnd !== INF_DATE && this.contractEnd < d;
     }
 
     constructor(input:any){
@@ -67,7 +69,7 @@ export class Employee{
         this.rate      = input.rate!==undefined?input.rate.substr(1):'';
         this.isManager = input.role!==undefined?(input.role==='Manager'?true:false):false;
         this.contractDate= input.contract_date!==undefined?moment(input.contract_date).toDate():today;
-        this.contractEnd = (input.contract_end && input.contract_end !=='infinity') ? moment(input.contract_end).toDate(): moment('1970-01-01').toDate();
+        this.contractEnd = (input.contract_end && input.contract_end !=='infinity') ? moment(input.contract_end).toDate(): INF_DATE;
         this.username    = (input.username)?input.username:'';
     }
 }

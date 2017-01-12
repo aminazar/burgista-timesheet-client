@@ -2,9 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import {RestService} from "../rest.service";
 import * as moment from 'moment';
 let fileSaver = require('file-saver/FileSaver.min.js');
-import { ViewContainerRef } from '@angular/core';
-import { Overlay } from 'angular2-modal';
-import { Modal } from 'angular2-modal/plugins/bootstrap';
 
 @Component({
   selector: 'app-report',
@@ -25,7 +22,6 @@ export class ReportComponent implements OnInit {
   private isFiltered = false;
   public curBranch = this.allBranch.bid;
   public branches = [this.allBranch];
-  data = "";
   private filteredEid = NaN;
   private hoursSum;
   private minsSum;
@@ -45,8 +41,28 @@ export class ReportComponent implements OnInit {
   private wageSum;
   private paidSum:any=0;
   private remainderSum:any=0;
+  public message='';
+  public errMessage='';
+  emailEnabled={};
+  emailSent={};
+  private filteredHasEmail: boolean;
 
   constructor(private restService:RestService) {
+  }
+  showError(err){
+    //To create a change in message to invoke fade out effect
+    if(this.errMessage === err)
+      this.errMessage += ' ';
+    else
+      this.errMessage = err;
+  }
+
+  showMessage(msg){
+    //To create a change in message to invoke fade out effect
+    if(this.message === msg)
+      this.message+=' ';
+    else
+      this.message = msg
   }
 
   onEndSelect(d){
@@ -75,6 +91,10 @@ export class ReportComponent implements OnInit {
             this.sumSum = 0;
             let breaksSum = 0;
             for(var i in this.table) {
+              this.emailEnabled[this.table[i].eid]=true;
+              if(this.curBranch==='ALL'&&this.emailSent[this.table[i].eid]===undefined)
+                this.emailSent[this.table[i].eid]=false;
+
               this.paid[this.table[i].eid] = 0;
               this.table[i].breaks_hours = Math.floor(this.table[i].breaks / 60);
               this.table[i].breaks_mins = Math.round(this.table[i].breaks % 60);
@@ -128,22 +148,42 @@ export class ReportComponent implements OnInit {
 
   filter(eid, filteredName){
     this.isFiltered = true;
-    this.filteredName = filteredName;
-    this.filteredEid = eid;
+    this.prepareFilter(filteredName, eid);
     this.getFilteredTable();
   }
 
-  emailReport(eid,filteredName){
+  private prepareFilter(filteredName, eid) {
     this.filteredName = filteredName;
     this.filteredEid = eid;
-    this.getFilteredTable(()=>{
+    this.filteredHasEmail = !!this.table.find(row => row.eid === eid).email;
+  }
+
+  emailReport(eid,filteredName){
+    let callback = ()=>{
       let data = this.getFilteredData();
-      this.restService.update('report/'+moment(this.startDate).format('YYYY-MM-DD')+'/'+moment(this.endDate).format('YYYY-MM-DD'),eid,data)
-          .subscribe(
-              ()=>{},
-              (err)=>{}
-          )
-    })
+      let fromDate = moment(this.startDate).format('YYYY-MM-DD');
+      let toDate   = moment(this.endDate).format('YYYY-MM-DD');
+      this.restService.update(`report/${fromDate}/${toDate}`, eid, data)
+        .subscribe(
+          ()=>{
+            this.showMessage(`Timesheet is emailed to ${filteredName}`);
+            this.emailEnabled[eid]=true;
+            this.emailSent[eid]=true;
+          },
+          (err)=>{
+            this.showError(err);
+            this.emailEnabled[eid]=true;
+            this.emailSent[eid]=false;
+          }
+        )
+    };
+
+    if(!this.isFiltered) {
+      this.prepareFilter(filteredName, eid);
+      this.emailEnabled[eid] = false;
+      this.getFilteredTable(callback);
+    }
+    else callback();
   }
 
   private getFilteredTable(callback:any=null) {
@@ -205,78 +245,21 @@ export class ReportComponent implements OnInit {
   unfilter(){
     this.isFiltered = false;
   }
+
   recalcPaid(){
     this.paidSum      = this.table.map(r=>parseFloat(this.paid[r.eid]?this.paid[r.eid]:0)).reduce((r1,r2)=>r1+r2,0).toFixed(2);
     this.remainderSum = (this.sumSum - this.paidSum).toFixed(2);
     if(typeof this.sumSum==='number')
       this.sumSum     = this.sumSum.toFixed(2);
   }
+
   convertToCSV() {
   var result, ctr, keys, columnDelimiter, lineDelimiter, data;
 
   data = [];
   let paid = this.paid;
   let calc = this.calc;
-  if(this.isFiltered) {
-    this.fTable.forEach((currentVal, index)=> {
-      data.push({
-        "#": index + 1,
-        "Date": currentVal.sdate,
-        "Branch": this.curBranch==='ALL'?currentVal.branch:'',
-        "Start Time": currentVal.start_time,
-        "End Time": currentVal.end_time,
-        "Rate": '£' + currentVal.rate,
-        "Worked": currentVal.hours + ':' + currentVal.mins,
-        "Break": currentVal.breaktime,
-        "Paying Time": currentVal.paying_time_hours + ':' + currentVal.paying_time_mins,
-        "Wage":'£' +currentVal.wage.toFixed(2),
-      })
-    });
-    data.push({
-      '#':'Sum',
-      'Date':'',
-      'Branch':'',
-      'Start Time':'',
-      'End Time':'',
-      'Rate':'',
-      'Worked': this.fHoursSum + ':' + this.fMinsSum,
-      'Break': this.fBreaktimeSumHours + ':' + this.fBreaktimeSumMinutes,
-      'Paying Time': this.fPayingTimeSumHours + ':' + this.fPayingTimeSumMinutes,
-      'Wage':'£' + this.wageSum,
-    })
-  }
-  else {
-    this.table.forEach(function (currentVal, index) {
-      data.push({
-        "#": index + 1,
-        "ID": currentVal.eid,
-        "First Name": currentVal.firstname,
-        "Surname": currentVal.surname,
-        "Hourly Rate": '£' +currentVal.rate.substr(1),
-        "Worked": currentVal.hours + ":" + currentVal.mins,
-        "Breaks": currentVal.breaks_hours + ':' + currentVal.breaks_mins,
-        "Paying Time": currentVal.paying_time_hours + ':' + currentVal.paying_time_mins,
-        "Holiday Entitlement": currentVal.holiday_hours + ':' + currentVal.holiday_mins,
-        "Wage Sum": '£' + calc[currentVal.eid].toFixed(2),
-        "Wage Paid": '£' + parseFloat(paid[currentVal.eid]).toFixed(2),
-        "Wage Remainder": '£' + (calc[currentVal.eid] - paid[currentVal.eid]).toFixed(2)
-      });
-    });
-    data.push({
-      "#": 'Sum',
-      "ID": '',
-      "First Name": '',
-      "Surname": '',
-      "Hourly Rate": '',
-      "Worked": this.hoursSum + ":" + this.minsSum,
-      "Breaks": this.breaksSumHours + ':' + this.breaksSumMinutes,
-      "Paying Time": this.payingTimeSumHours + ':' + this.payingTimeSumMinutes,
-      "Holiday Entitlement": this.holdiaySumHours + ':' + this.holidaySumMinutes,
-      "Wage Sum": '£' + this.sumSum,
-      "Wage Paid": '£' + this.paidSum,
-      "Wage Remainder": '£' + this.remainderSum,
-    })
-  }
+  data = (this.isFiltered) ? this.getFilteredData() : this.getData();
   columnDelimiter =  ',';
   lineDelimiter =  '\n';
 
@@ -298,6 +281,73 @@ export class ReportComponent implements OnInit {
   });
 
   return result;
+}
+
+  private getData() {
+    let data = [];
+      this.table.forEach( (currentVal, index) => {
+        data.push({
+          "#": index + 1,
+          "ID": currentVal.eid,
+          "First Name": currentVal.firstname,
+          "Surname": currentVal.surname,
+          "Hourly Rate": '£' + currentVal.rate.substr(1),
+          "Worked": currentVal.hours + ":" + currentVal.mins,
+          "Breaks": currentVal.breaks_hours + ':' + currentVal.breaks_mins,
+          "Paying Time": currentVal.paying_time_hours + ':' + currentVal.paying_time_mins,
+          "Holiday Entitlement": currentVal.holiday_hours + ':' + currentVal.holiday_mins,
+          "Wage Sum": '£' + this.calc[currentVal.eid].toFixed(2),
+          "Wage Paid": '£' + parseFloat(this.paid[currentVal.eid]).toFixed(2),
+          "Wage Remainder": '£' + (this.calc[currentVal.eid] - this.paid[currentVal.eid]).toFixed(2)
+        });
+      });
+      data.push({
+        "#": 'Sum',
+        "ID": '',
+        "First Name": '',
+        "Surname": '',
+        "Hourly Rate": '',
+        "Worked": this.hoursSum + ":" + this.minsSum,
+        "Breaks": this.breaksSumHours + ':' + this.breaksSumMinutes,
+        "Paying Time": this.payingTimeSumHours + ':' + this.payingTimeSumMinutes,
+        "Holiday Entitlement": this.holdiaySumHours + ':' + this.holidaySumMinutes,
+        "Wage Sum": '£' + this.sumSum,
+        "Wage Paid": '£' + this.paidSum,
+        "Wage Remainder": '£' + this.remainderSum,
+      })
+    return data;
+  }
+
+  private getFilteredData() {
+    let data = [];
+    this.fTable.forEach((currentVal, index) => {
+      data.push({
+        "#": index + 1,
+        "Date": currentVal.sdate,
+        "Branch": this.curBranch === 'ALL' ? currentVal.branch : '',
+        "Start Time": currentVal.start_time,
+        "End Time": currentVal.end_time,
+        "Rate": '£' + currentVal.rate,
+        "Worked": currentVal.hours + ':' + currentVal.mins,
+        "Break": currentVal.breaktime,
+        "Paying Time": currentVal.paying_time_hours + ':' + currentVal.paying_time_mins,
+        "Wage": '£' + currentVal.wage.toFixed(2),
+      })
+    });
+    data.push({
+      '#': 'Sum',
+      'Date': '',
+      'Branch': '',
+      'Start Time': '',
+      'End Time': '',
+      'Rate': '',
+      'Worked': this.fHoursSum + ':' + this.fMinsSum,
+      'Break': this.fBreaktimeSumHours + ':' + this.fBreaktimeSumMinutes,
+      'Paying Time': this.fPayingTimeSumHours + ':' + this.fPayingTimeSumMinutes,
+      'Wage': '£' + this.wageSum,
+    })
+
+  return data;
 }
 
   downloadCSV(args) {
