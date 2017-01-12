@@ -107,7 +107,7 @@ export class ReportComponent implements OnInit {
                 this.table[i].paying_time_hours = this.table[i].hours - this.table[i].breaks_hours;
                 this.table[i].paying_time_mins  = this.table[i].mins - this.table[i].breaks_mins;
               }
-              let holiday = .12 * (this.table[i].paying_time_hours * 60 + this.table[i].paying_time_mins);
+              let holiday = .12 * (this.table[i].hours * 60 + this.table[i].mins);
               this.table[i].holiday_hours = Math.floor(holiday / 60);
               this.table[i].holiday_mins  = Math.round(holiday % 60);
               this.calc[this.table[i].eid] = Math.round( 100 * parseFloat(this.table[i].rate.substr(1)) * (this.table[i].hours + (this.table[i].mins-parseInt(this.table[i].breaks)) / 60 ) ) / 100;
